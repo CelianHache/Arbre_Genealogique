@@ -7,7 +7,25 @@ procedure Main is
    subtype Id_Type is Integer;
    subtype Element_Type is Integer;
 
-   package Integer_Tree is new Arbre_Bin (Element_Type => Element_Type, Id_Type => Id_Type);
+   -- Définir les fonctions To_String pour les deux sous-types
+   function To_String_Element (X : Element_Type) return String is
+   begin
+      return Integer'Image(X);
+   end To_String_Element;
+
+   function To_String_Id (X : Id_Type) return String is
+   begin
+      return Integer'Image(X);
+   end To_String_Id;
+
+   -- Instancier le package générique avec des associations positionnelles
+   package Integer_Tree is new Arbre_Bin (
+      Element_Type,
+      Id_Type,
+      To_String_Element,
+      To_String_Id
+   );
+
    use Integer_Tree;
    use Ada.Text_IO;
 
