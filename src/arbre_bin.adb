@@ -54,17 +54,24 @@ package body Arbre_Bin is
 
    -- Afficher un nœud
    procedure Display(Tree : in T_Arbre) is
-      procedure Display_Space(Tree : in T_Arbre; Space: Integer) is
+      procedure Display_Space(Tree : in T_Arbre; Space: Integer; name: String) is
       begin
-         if not Is_Null (Tree) then
+         Put_Line("");
             for I in 0 .. Space loop
-               Put(" ");
-               Put(To_String (Tree.Value));
+               Put("  ");
             end loop;
+            if not Is_Null (Tree) then
+               Put("-- " & name & " : " & To_String (Tree.Value));
+               Display_Space (Tree.Left, Space + 1, "left");
+               Display_Space (Tree.Right, Space + 1, "right");
+            else 
+               Put("-- " & name & " : Empty");
          end if;
       end Display_Space;
    begin
-      Display_Space (Tree, 0);
+      Display_Space (Tree, 0, "root");
+      Put_Line("");
+      Put_Line("");
 
    end Display;
 
