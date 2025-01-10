@@ -1,52 +1,123 @@
-with arbre_bin;
-with noeud_bin;
-with Ada.Text_IO; use Ada.Text_IO;
+with Arbre_Bin;
+with Ada.Text_IO;
+with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 
 procedure Main is
-   -- Déclare une variable de type Arbre_Bin
-   Tree : Arbre_Bin.T_Arbre_Bin;
 
-   -- Déclare des variables pour les nœuds
-   Node1, Node2 : Noeud_Bin.T_Noeud_Bin;
+   subtype Id_Type is Integer;
+   subtype Element_Type is Integer;
+
+   package Integer_Tree is new Arbre_Bin (Element_Type => Element_Type, Id_Type => Id_Type);
+   use Integer_Tree;
+   use Ada.Text_IO;
+
+   Tree : T_Arbre;
+
+   procedure Show_Menu is
+   begin
+      Put_Line("=== Menu ===");
+      Put_Line("1. Initialiser l'arbre (racine)");
+      Put_Line("2. Ajouter un nœud gauche");
+      Put_Line("3. Ajouter un nœud droit");
+      Put_Line("4. Supprimer le nœud gauche");
+      Put_Line("5. Supprimer le nœud droit");
+      Put_Line("6. Afficher l'arbre");
+      Put_Line("7. Quitter");
+   end Show_Menu;
+
+   function Get_User_Input(Prompt : String) return Integer is
+      Input : Integer;
+   begin
+      Put(Prompt);
+      Get(Input);
+      return Input;
+   exception
+      when others =>
+         Put_Line("Entrée invalide. Veuillez réessayer.");
+         return Get_User_Input(Prompt);
+   end Get_User_Input;
+
 begin
-   -- Initialiser l'arbre avec un nœud racine
-   Put_Line("Initialisation de l'arbre avec une racine.");
-   Arbre_Bin.Add_Root(Tree, 10);  -- Ajoute une racine avec la valeur 10
+   loop
+      Show_Menu;
+      declare
+         Choice : Integer := Get_User_Input("Votre choix : ");
+      begin
+         case Choice is
+            when 1 =>
+               if not Is_Null(Tree) then
+                  Put_Line("L'arbre a déjà une racine !");
+               else
+                  declare
+                     Value : Integer := Get_User_Input("Entrez la valeur de la racine : ");
+                     Id    : Natural := 1;
+                  begin
+                     Initialise(Tree, Id, Value);
+                     Put_Line("Racine initialisée.");
+                  end;
+               end if;
 
-   -- Ajouter un successeur à gauche de la racine
-   Put_Line("Ajout d'un successeur à gauche de la racine.");
-   Arbre_Bin.Add_Left(Tree, 10, 5);  -- Ajoute à gauche de la racine (10)
+            when 2 =>
+               if Is_Null(Tree) then
+                  Put_Line("L'arbre n'a pas de racine. Initialisez-le d'abord.");
+               else
+                  declare
+                     Value : Integer := Get_User_Input("Entrez la valeur du nœud gauche : ");
+                     Id    : Natural := 2;
+                  begin
+                     Add_Left(Tree, Id, Value);
+                     Put_Line("Nœud gauche ajouté.");
+                  end;
+               end if;
 
-   -- Ajouter un successeur à droite de la racine
-   Put_Line("Ajout d'un successeur à droite de la racine.");
-   Arbre_Bin.Add_Right(Tree, 10, 15);  -- Ajoute à droite de la racine (10)
+            when 3 =>
+               if Is_Null(Tree) then
+                  Put_Line("L'arbre n'a pas de racine. Initialisez-le d'abord.");
+               else
+                  declare
+                     Value : Integer := Get_User_Input("Entrez la valeur du nœud droit : ");
+                     Id    : Natural := 3;
+                  begin
+                     Add_Right(Tree, Id, Value);
+                     Put_Line("Nœud droit ajouté.");
+                  end;
+               end if;
 
-   -- Afficher l'arbre
-   Put_Line("Affichage de l'arbre.");
-   Arbre_Bin.Display(Tree);
+            when 4 =>
+               if Is_Null(Tree) then
+                  Put_Line("L'arbre n'a pas de racine. Initialisez-le d'abord.");
+               elsif Is_Null(Get_Left(Tree)) then
+                  Put_Line("Le nœud gauche est déjà vide.");
+               else
+                  Remove_Left(Tree);
+                  Put_Line("Nœud gauche supprimé.");
+               end if;
 
-   -- Tester l'ajout de nœuds à gauche et à droite
-   Put_Line("Ajout d'un nœud à gauche de 5.");
-   Noeud_Bin.Initialise(Node1, 3);
-   Noeud_Bin.Add_Left(Node1, 1);  -- Ajoute un nœud avec la valeur 1 à gauche de Node1
+            when 5 =>
+               if Is_Null(Tree) then
+                  Put_Line("L'arbre n'a pas de racine. Initialisez-le d'abord.");
+               elsif Is_Null(Get_Right(Tree)) then
+                  Put_Line("Le nœud droit est déjà vide.");
+               else
+                  Remove_Right(Tree);
+                  Put_Line("Nœud droit supprimé.");
+               end if;
 
-   Put_Line("Affichage du nœud Node1.");
-   Noeud_Bin.Display(Node1);  -- Affiche le nœud Node1
+            when 6 =>
+               if Is_Null(Tree) then
+                  Put_Line("L'arbre est vide.");
+               else
+                  -- Put_Line("Valeur de la racine : " & Integer'Image(Get_Value(Tree)));
+                  Display (Tree);
+               end if;
 
-   -- Supprimer un nœud à gauche
-   Put_Line("Suppression du nœud à gauche de Node1.");
-   Noeud_Bin.Remove_Left(Node1);  -- Supprime le nœud gauche de Node1
+            when 7 =>
+               Put_Line("Au revoir !");
+               exit;
 
-   -- Afficher le nœud après suppression
-   Put_Line("Affichage du nœud Node1 après suppression.");
-   Noeud_Bin.Display(Node1);
-
-   -- Tester la suppression d'un nœud
-   Put_Line("Suppression du nœud à droite de la racine.");
-   Arbre_Bin.Remove_Right(Tree);  -- Supprime le nœud droit de la racine
-
-   -- Afficher l'arbre après suppression
-   Put_Line("Affichage de l'arbre après suppression du nœud droit.");
-   Arbre_Bin.Display(Tree);
-   
+            when others =>
+               Put_Line("Choix invalide. Veuillez réessayer.");
+         end case;
+      end;
+   end loop;
 end Main;

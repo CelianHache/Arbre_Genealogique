@@ -1,36 +1,54 @@
-with Noeud_Bin;
-
 generic
-   -- Le type du contenu du nœud (éléments stockés dans l'arbre)
    type Element_Type is private;
+   type Id_Type is private;
+   with function To_String ( X : Element_Type) return String;
+   with function To_String ( X : Id_Type) return String;
 package Arbre_Bin is
 
-   -- Type représentant un arbre binaire (racine de l'arbre)
-   type T_Arbre_Bin is private;
+   type T_Arbre is limited private;
 
-   -- Ajouter une racine à l'arbre
-   procedure Add_Root(Tree : in out T_Arbre_Bin; Value : in Element_Type);
+   procedure Initialise(Tree : in out T_Arbre; Id :  in Id_Type; Value : in Element_Type);
 
-   -- Ajouter un nœud à gauche
-   procedure Add_Left(Tree : in out T_Arbre_Bin; Parent_Value : in Element_Type; Value : in Element_Type);
+   -- Ajouter un successeur à droite
+   procedure Add_Right(Tree : in out T_Arbre; Id :  in Id_Type; Value : in Element_Type);
 
-   -- Ajouter un nœud à droite
-   procedure Add_Right(Tree : in out T_Arbre_Bin; Parent_Value : in Element_Type; Value : in Element_Type);
+   -- Ajouter un successeur à gauche
+   procedure Add_Left(Tree : in out T_Arbre; Id :  in Id_Type; Value : in Element_Type);
 
-   -- Afficher les éléments de l'arbre (parcours préfixé)
-   generic
-      with procedure Display_Element(Value : in Element_Type); -- Procédure pour afficher un élément
-   procedure Display(Tree : in T_Arbre_Bin);
+   -- Supprimer le successeur droit
+   procedure Remove_Right(Tree : in out T_Arbre);
 
-   -- Vider l'arbre
-   procedure Clear(Tree : in out T_Arbre_Bin);
+   -- Supprimer le successeur gauche
+   procedure Remove_Left(Tree : in out T_Arbre);
+
+   -- Obtenir le successeur droit
+   function Get_Right(Tree : in T_Arbre) return T_Arbre;
+
+   -- Obtenir le successeur gauche
+   function Get_Left(Tree : in T_Arbre) return T_Arbre;
+
+   -- Obtenir l'identifiant (ou autre valeur liée au nœud)
+   function Get_Id(Tree : in T_Arbre) return Id_Type;
+
+   -- Obtenir la valeur contenue dans le nœud
+   function Get_Value(Tree : in T_Arbre) return Element_Type;
+
+   function Is_Null(Tree : in T_Arbre) return Boolean;
+
+   procedure Display(Tree : in T_Arbre);
 
 private
 
-   type Node_Access is access all Noeud_Bin.T_Noeud_Bin;
+   type T_Noeud;
+   type T_Arbre is access T_Noeud;
 
-   type T_Arbre_Bin is record
-      Root : Node_Access := null; -- Pointeur vers le nœud racine
-   end record;
+   type T_Noeud is
+      record
+         Id     : Id_Type;
+         Value  : Element_Type; 
+         Right  : T_Arbre;
+         Left   : T_Arbre;
+      end record;
+
 
 end Arbre_Bin;
