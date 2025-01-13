@@ -2,19 +2,25 @@ with Ada.Text_IO; use Ada.Text_IO;
 
 package body Arbre_Bin is
 
-   procedure Initialise(Tree : in out T_Arbre; Id : in Id_Type;  Value : in Element_Type) is
+   procedure Initialise(Tree : in out T_Arbre; Id : in Id_Type;  Value : in Element_Type; Left_Title : in String; Right_Title : in String) is
    begin
-      Tree := new T_Noeud'(Id => Id, Value => Value, Right => null, Left => null);
+      Tree := new T_Noeud'(
+         Id => Id, 
+         Value => Value, 
+         Right => null, 
+         Left => null, 
+         Right_title => new String'(Right_title),
+         Left_title => new String'(Left_title));
    end Initialise;
 
    procedure Add_Left (Tree : in out T_Arbre; Id : in Id_Type; Value : in Element_Type) is 
    begin 
-      Arbre_Bin.Initialise(Tree.Left, Id, Value);
+      Arbre_Bin.Initialise(Tree.Left, Id, Value, Tree.Left_Title.all, Tree.Right_title.all);
    end Add_Left;
 
    procedure Add_Right (Tree : in out T_Arbre; Id : in Id_Type; Value : in Element_Type) is 
    begin 
-      Arbre_Bin.Initialise(Tree.Right, Id, Value);
+      Arbre_Bin.Initialise(Tree.Right, Id, Value,Tree.Left_Title.all, Tree.Right_title.all);
    end Add_Right;
 
    procedure Remove_Left (Tree : in out T_Arbre) is
@@ -47,6 +53,17 @@ package body Arbre_Bin is
       return Tree.Id;   
    end Get_Id;
 
+   --  function Get_Left_Title (Tree : in T_Arbre) return String is 
+   --  begin 
+   --     return Tree.Left_title;   
+   --  end Get_Left_Title;
+
+
+   --  function Get_Right_Title (Tree : in T_Arbre) return String is 
+   --  begin 
+   --     return Tree.Right_title;   
+   --  end Get_Right_Title;
+
    function Is_Null (Tree : in T_Arbre) return Boolean is
    begin 
       return Tree = null;
@@ -62,8 +79,8 @@ package body Arbre_Bin is
             end loop;
             if not Is_Null (Tree) then
                Put("-- " & name & " : " & To_String (Tree.Id) & " > " & To_String (Tree.Value));
-               Display_Space (Tree.Left, Space + 1, "left");
-               Display_Space (Tree.Right, Space + 1, "right");
+               Display_Space (Tree.Left, Space + 1, Tree.Left_title.all);
+               Display_Space (Tree.Right, Space + 1, Tree.Right_title.all);
             else 
                Put("-- " & name & " : Empty");
          end if;
