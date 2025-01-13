@@ -61,7 +61,7 @@ package body Arbre_Bin is
                Put("  ");
             end loop;
             if not Is_Null (Tree) then
-               Put("-- " & name & " : " & To_String (Tree.Value));
+               Put("-- " & name & " : " & To_String (Tree.Id) & " > " & To_String (Tree.Value));
                Display_Space (Tree.Left, Space + 1, "left");
                Display_Space (Tree.Right, Space + 1, "right");
             else 

@@ -1,6 +1,9 @@
 with Arbre_Bin;
 with Ada.Text_IO;
 with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
+with Ada.Calendar; use Ada.Calendar;
+with Arbre_Genealog;
+with Personne; use Personne;
 
 procedure Main is
 
@@ -30,6 +33,9 @@ procedure Main is
    use Ada.Text_IO;
 
    Tree : T_Arbre;
+
+   Family_Tree : Arbre_Genealog.T_Arbre;
+   Personne : T_Personne;
 
    procedure Show_Menu is
    begin
@@ -128,6 +134,13 @@ begin
                   -- Put_Line("Valeur de la racine : " & Integer'Image(Get_Value(Tree)));
                   Display (Tree);
                end if;
+
+            when 8 =>
+               Initialise(Personne, "Antoine", "Gouzy", "Homme", 
+                  Ada.Calendar.Time_Of(2003, 4, 14), "Libourne");
+
+               Arbre_Genealog.Create_Family_Tree(Family_Tree, 1, Personne);
+               Arbre_Genealog.Display_Family_Tree(Family_Tree);
 
             when 7 =>
                Put_Line("Au revoir !");
