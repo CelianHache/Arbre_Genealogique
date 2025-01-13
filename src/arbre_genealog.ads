@@ -4,10 +4,8 @@ with Personne;
 package Arbre_Genealog is
 
    package Arbre_Personnes is new Arbre_Bin (
-      Personne.T_Personne, 
-      integer, 
-      Personne.To_String,
-      Integer'Image
+      Personne.T_Personne,
+      Personne.To_String
    );
    use Arbre_Personnes;
 

@@ -7,7 +7,6 @@ with Personne; use Personne;
 
 procedure Main is
 
-   subtype Id_Type is Integer;
    subtype Element_Type is Integer;
 
    -- Définir les fonctions To_String pour les deux sous-types
@@ -16,17 +15,10 @@ procedure Main is
       return Integer'Image(X);
    end To_String_Element;
 
-   function To_String_Id (X : Id_Type) return String is
-   begin
-      return Integer'Image(X);
-   end To_String_Id;
-
    -- Instancier le package générique avec des associations positionnelles
    package Integer_Tree is new Arbre_Bin (
       Element_Type,
-      Id_Type,
-      To_String_Element,
-      To_String_Id
+      To_String_Element
    );
 
    use Integer_Tree;

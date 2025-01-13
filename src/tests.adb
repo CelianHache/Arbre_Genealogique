@@ -13,7 +13,7 @@ procedure tests is
    begin
       pragma Assert(Is_Null(Family_Tree)); 
       Initialise(Personne, "Antoine", "Gouzy", "Homme", Ada.Calendar.Time_Of(2003, 4, 14), "Libourne");
-      Create_Family_Tree(Family_Tree, 1, Personne);
+      Create_Family_Tree(Family_Tree, Personne);
       pragma Assert(not Is_Null (Family_Tree));
       pragma Assert(Is_Null (Get_Left(Family_Tree)));
       pragma Assert(Is_Null (Get_Right(Family_Tree)));
@@ -29,8 +29,8 @@ procedure tests is
       pragma Assert(Is_Null(Family_Tree)); 
       Initialise(Personne, "Antoine", "Gouzy", "Homme", Ada.Calendar.Time_Of(2003, 4, 14), "Libourne");
       Initialise(Parent, "Mamam", "Gouzy", "Femme", Ada.Calendar.Time_Of(1973, 5, 15), "Libourne");
-      Create_Family_Tree(Family_Tree, 1, Personne);
-      Add_Right (Family_Tree, 2, Parent);
+      Create_Family_Tree(Family_Tree, Personne);
+      Add_Right (Family_Tree, "02", Parent);
       Mother := Get_Mother(Family_Tree);
       pragma Assert(not Is_Null (Family_Tree));
       pragma Assert(Is_Null (Get_Father(Family_Tree)));

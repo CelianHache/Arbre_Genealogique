@@ -11,7 +11,7 @@ package body Arbre_Genealog is
 
    procedure Create_Family_Tree(Root : in out T_Arbre_Personnes; Root_Value : T_Personne) is
    begin
-      Initialise(Root, 0, Root_Value, "Père", "Mère");
+      Initialise(Root, "0", Root_Value, "Père", "Mère");
    end Create_Family_Tree;
 
    procedure Display_Family_Tree(Tree : in T_Arbre_Personnes) is

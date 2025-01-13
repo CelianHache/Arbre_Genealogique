@@ -1,19 +1,17 @@
 generic
    type Element_Type is private;
-   type Id_Type is private;
    with function To_String ( X : Element_Type) return String;
-   with function To_String ( X : Id_Type) return String;
 package Arbre_Bin is
 
    type T_Arbre is private;
 
-   procedure Initialise(Tree : in out T_Arbre; Id :  in Id_Type; Value : in Element_Type; Left_Title : in String; Right_Title : in String);
+   procedure Initialise(Tree : in out T_Arbre; Id :  in String; Value : in Element_Type; Left_Title : in String; Right_Title : in String);
 
    -- Ajouter un successeur à droite
-   procedure Add_Right(Tree : in out T_Arbre; Id :  in Id_Type; Value : in Element_Type);
+   procedure Add_Right(Tree : in out T_Arbre; Id :  in String; Value : in Element_Type);
 
    -- Ajouter un successeur à gauche
-   procedure Add_Left(Tree : in out T_Arbre; Id :  in Id_Type; Value : in Element_Type);
+   procedure Add_Left(Tree : in out T_Arbre; Id :  in String; Value : in Element_Type);
 
    -- Supprimer le successeur droit
    procedure Remove_Right(Tree : in out T_Arbre);
@@ -28,7 +26,7 @@ package Arbre_Bin is
    function Get_Left(Tree : in T_Arbre) return T_Arbre;
 
    -- Obtenir l'identifiant (ou autre valeur liée au nœud)
-   function Get_Id(Tree : in T_Arbre) return Id_Type;
+   function Get_Id(Tree : in T_Arbre) return String;
 
    --  -- Obtenir l'identifiant (ou autre valeur liée au nœud)
    --  function Get_Left_Title(Tree : in T_Arbre) return String;
@@ -50,7 +48,7 @@ private
 
    type T_Noeud is
       record
-         Id          : Id_Type;
+         Id          : access String;
          Value       : Element_Type; 
          Right       : T_Arbre;
          Left        : T_Arbre;
