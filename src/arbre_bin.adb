@@ -1,4 +1,5 @@
 with Ada.Text_IO; use Ada.Text_IO;
+with System.Storage_Elements; use System.Storage_Elements;
 
 package body Arbre_Bin is
 
@@ -15,12 +16,12 @@ package body Arbre_Bin is
 
    procedure Add_Left (Tree : in out T_Arbre; Id : in String; Value : in Element_Type) is 
    begin 
-      Arbre_Bin.Initialise(Tree.Left, Id, Value, Tree.Left_Title.all, Tree.Right_title.all);
+      Initialise(Tree.Left, Id, Value, Tree.Left_Title.all, Tree.Right_title.all);
    end Add_Left;
 
    procedure Add_Right (Tree : in out T_Arbre; Id : in String; Value : in Element_Type) is 
    begin 
-      Arbre_Bin.Initialise(Tree.Right, Id, Value,Tree.Left_Title.all, Tree.Right_title.all);
+      Initialise(Tree.Right, Id, Value,Tree.Left_Title.all, Tree.Right_title.all);
    end Add_Right;
 
    procedure Remove_Left (Tree : in out T_Arbre) is
@@ -53,16 +54,16 @@ package body Arbre_Bin is
       return Tree.Id.all;   
    end Get_Id;
 
-   --  function Get_Left_Title (Tree : in T_Arbre) return String is 
-   --  begin 
-   --     return Tree.Left_title;   
-   --  end Get_Left_Title;
+   function Get_Left_Title (Tree : in T_Arbre) return String is 
+   begin 
+      return Tree.Left_title.all;   
+   end Get_Left_Title;
 
 
-   --  function Get_Right_Title (Tree : in T_Arbre) return String is 
-   --  begin 
-   --     return Tree.Right_title;   
-   --  end Get_Right_Title;
+   function Get_Right_Title (Tree : in T_Arbre) return String is 
+   begin 
+      return Tree.Right_title.all;   
+   end Get_Right_Title;
 
    function Is_Null (Tree : in T_Arbre) return Boolean is
    begin 

@@ -28,11 +28,11 @@ package Arbre_Bin is
    -- Obtenir l'identifiant (ou autre valeur liée au nœud)
    function Get_Id(Tree : in T_Arbre) return String;
 
-   --  -- Obtenir l'identifiant (ou autre valeur liée au nœud)
-   --  function Get_Left_Title(Tree : in T_Arbre) return String;
+   -- Obtenir l'identifiant (ou autre valeur liée au nœud)
+   function Get_Left_Title(Tree : in T_Arbre) return String;
 
-   --  -- Obtenir l'identifiant (ou autre valeur liée au nœud)
-   --  function Get_Right_Title(Tree : in T_Arbre) return String;
+   -- Obtenir l'identifiant (ou autre valeur liée au nœud)
+   function Get_Right_Title(Tree : in T_Arbre) return String;
 
    -- Obtenir la valeur contenue dans le nœud
    function Get_Value(Tree : in T_Arbre) return Element_Type;

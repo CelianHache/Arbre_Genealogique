@@ -20,27 +20,58 @@ package body Arbre_Genealog is
    end Display_Family_Tree;
 
    function Get_Father (Tree : in T_Arbre_Personnes) return T_Arbre_Personnes is
+      Father: T_Arbre_Personnes; 
    begin 
-      return Get_Left (Tree);
+      Father := Get_Left(Tree); 
+      return Father;
    end Get_Father;
 
    function Get_Mother (Tree : in T_Arbre_Personnes) return T_Arbre_Personnes is
+      Mother: T_Arbre_Personnes; 
    begin
-      return Get_Right (Tree);
+      Mother := Get_Right(Tree); 
+      return Mother;
    end Get_Mother;
 
-   --  procedure Add_Father (Tree : in out T_Arbre_Personnes; Value : in T_Personne) is 
-   --     Father: T_Arbre_Personnes;
-   --  begin
-   --     Father := Get_Father(Tree);
-   --     Initialise(Father, Get_Id(Tree) & "1", Value, Get_Left_Title(Tree), Get_Right_Title(Tree));
-   --  end Add_Father;
+   procedure Add_Father (Tree : in out T_Arbre_Personnes; Value : in T_Personne) is 
+   begin
+      Add_Left(Tree, Get_Id(Tree) & "1", Value);
+   end Add_Father;
+   
 
-   --  procedure Add_Mother (Tree : in out T_Arbre_Personnes; Value : in T_Personne) is 
-   --     Mother: T_Arbre_Personnes;
-   --  begin 
-   --     Mother := Get_Mother(Tree);
-   --     Initialise(Mother, Get_Id(Tree) & "2", Value, Get_Left_Title(Tree), Get_Right_Title(Tree));
-   --  end Add_Mother;
+   procedure Add_Mother (Tree : in out T_Arbre_Personnes; Value : in T_Personne) is 
+   begin 
+      Add_Right(Tree, Get_Id(Tree) & "2", Value);
+   end Add_Mother;
+
+   procedure Add_Father (Tree : in out T_Arbre_Personnes; Value : in T_Personne; Id_Child : String) is 
+      Child : T_Arbre_Personnes;
+   begin
+      Child := Get_Node_By_Id(Tree, Id_Child);
+      Add_Left(Child, Id_Child & "1", Value);
+   end Add_Father;
+   
+
+   procedure Add_Mother (Tree : in out T_Arbre_Personnes; Value : in T_Personne; Id_Child : String) is 
+      Child : T_Arbre_Personnes;
+   begin 
+      Child := Get_Node_By_Id(Tree, Id_Child);
+      Add_Right(Child, Id_Child & "2", Value);
+   end Add_Mother;
+
+
+   function Get_Node_By_Id (Tree : in T_Arbre_Personnes; Id_Child : String) return T_Arbre_Personnes is
+      Temp_Tree: T_Arbre_Personnes;
+   begin
+      Temp_Tree := Tree;
+      for i in Id_Child'Range loop
+         if Id_Child(i) = '1' then
+            Temp_Tree := Get_Father(Temp_Tree);
+         elsif Id_Child(i) = '2' then
+            Temp_Tree := Get_Mother(Temp_Tree);
+         end if;
+      end loop;
+      return Temp_Tree;
+   end Get_Node_By_Id;
 
 end Arbre_Genealog;

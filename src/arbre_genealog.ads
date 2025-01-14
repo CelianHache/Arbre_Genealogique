@@ -19,8 +19,14 @@ package Arbre_Genealog is
 
    function Get_Mother (Tree : in T_Arbre_Personnes) return T_Arbre_Personnes;
 
-   --  procedure Add_Father (Tree : in T_Arbre_Personnes; Value: Personne.T_Personne);
+   procedure Add_Father (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne);
 
-   --  procedure Add_Mother (Tree : in T_Arbre_Personnes; Value: Personne.T_Personne);
+   procedure Add_Mother (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne);
+
+   procedure Add_Father (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne; Id_Child: String);
+
+   procedure Add_Mother (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne; Id_Child: String);
+
+   function Get_Node_By_Id (Tree : in T_Arbre_Personnes; Id_Child : String) return T_Arbre_Personnes;
 
 end Arbre_Genealog;
