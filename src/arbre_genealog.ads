@@ -29,4 +29,6 @@ package Arbre_Genealog is
 
    function Get_Node_By_Id (Tree : in T_Arbre_Personnes; Id_Child : String) return T_Arbre_Personnes;
 
+   function Count_Ancestors(Tree: in T_Arbre_Personnes; Id_Node : in String) return Integer;
+
 end Arbre_Genealog;
