@@ -35,4 +35,7 @@ package Arbre_Genealog is
    function Get_Sorted_Ancestor_Array(List : in Ancestor_Array) return Ancestor_Array;
 
    function Equals(Array1 : in Ancestor_Array; Array2 : in Ancestor_Array) return boolean;
+   
+   function Count_Ancestors(Tree: in T_Arbre_Personnes; Id_Node : in String) return Integer;
+
 end Arbre_Genealog;
