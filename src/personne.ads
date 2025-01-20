@@ -21,6 +21,10 @@ package Personne is
 
    function To_String(P : in T_Personne) return String;
 
+   function Get_Name(P : in T_Personne) return access String;
+   function Get_First_Name(P : in T_Personne) return access String;
+   function Get_Gender(P : in T_Personne) return access String;
+
    private
       type T_Personne is record
          Prenom           : access String;
