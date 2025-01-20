@@ -42,9 +42,13 @@ package Arbre_Genealog is
 
    function Nodes_With_Only_One_Parent(Tree : in T_Arbre_Personnes) return Ancestor_Array;
 
+   function Nodes_Without_Parent(Tree : in T_Arbre_Personnes) return Ancestor_Array;
+
    function Has_Two_Parents(Tree : in T_Arbre_Personnes) return boolean;
 
    function Has_Only_One_Parent(Tree : in T_Arbre_Personnes) return boolean;
+
+   function Is_Orphan(Tree : in T_Arbre_Personnes) return boolean;
 
    function Get_Tree_Depth(Tree: in T_Arbre_Personnes) return Integer;
 
