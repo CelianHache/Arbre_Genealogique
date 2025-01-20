@@ -156,9 +156,11 @@ procedure tests is
 
    procedure test_number_of_parents is 
       Family_Root : T_Arbre_Personnes;
-      Ancestors_List: Ancestor_Array(1 .. 2**5); 
+      Two_Parents: Ancestor_Array(1 .. 2**5); 
+      One_Parent: Ancestor_Array(1 .. 2**5); 
       Expected_Two_Parents: Ancestor_Array(1 .. 2**5); 
-      P1, P2, P3, P4, P5, P8, P9 : T_Personne;
+      Expected_One_Parent: Ancestor_Array(1 .. 2**5); 
+      P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20 : T_Personne;
    begin
       initialise_arbre (Family_Root);
       P1 := Get_Value(Get_Node_By_Id (Family_Root, "0"));
@@ -166,9 +168,23 @@ procedure tests is
       P3 := Get_Value(Get_Node_By_Id (Family_Root, "02"));
       P4 := Get_Value(Get_Node_By_Id (Family_Root, "011"));
       P5 := Get_Value(Get_Node_By_Id (Family_Root, "012"));
+      P6 := Get_Value(Get_Node_By_Id (Family_Root, "021"));
+      P7 := Get_Value(Get_Node_By_Id (Family_Root, "022"));
       P8 := Get_Value(Get_Node_By_Id (Family_Root, "0111"));
       P9 := Get_Value(Get_Node_By_Id (Family_Root, "0112"));
-      Ancestors_List := Nodes_With_Two_Parents (Family_Root);
+      P10 := Get_Value(Get_Node_By_Id (Family_Root, "0121"));
+      P11 := Get_Value(Get_Node_By_Id (Family_Root, "0122"));
+      P12 := Get_Value(Get_Node_By_Id (Family_Root, "01111"));
+      P13 := Get_Value(Get_Node_By_Id (Family_Root, "01112"));
+      P14 := Get_Value(Get_Node_By_Id (Family_Root, "01121"));
+      P15 := Get_Value(Get_Node_By_Id (Family_Root, "01122"));
+      P16 := Get_Value(Get_Node_By_Id (Family_Root, "01211"));
+      P17 := Get_Value(Get_Node_By_Id (Family_Root, "011111"));
+      P18 := Get_Value(Get_Node_By_Id (Family_Root, "011122"));
+      P19 := Get_Value(Get_Node_By_Id (Family_Root, "011211"));
+      P20 := Get_Value(Get_Node_By_Id (Family_Root, "011222"));
+      Two_Parents := Nodes_With_Two_Parents (Family_Root);
+      One_Parent := Nodes_With_Only_One_Parent (Family_Root);
       Expected_Two_Parents(1) := P1;
       Expected_Two_Parents(2) := P2;
       Expected_Two_Parents(3) := P3;
@@ -176,7 +192,17 @@ procedure tests is
       Expected_Two_Parents(5) := P5;
       Expected_Two_Parents(6) := P8;
       Expected_Two_Parents(7) := P9;
-      pragma Assert(Equals(Ancestors_List, Expected_Two_Parents));
+      Expected_One_Parent(1) := P10;
+      Expected_One_Parent(2) := P12;
+      Expected_One_Parent(3) := P13;
+      Expected_One_Parent(4) := P14;
+      Expected_One_Parent(5) := P15;
+      Expected_One_Parent(6) := P16;
+      pragma Assert(Equals(Two_Parents, Expected_Two_Parents));
+      for i in One_Parent'Range loop
+         Display (One_Parent(i));
+      end loop;
+      pragma Assert(Equals(One_Parent, Expected_One_Parent));
       Put_Line("Test_number_of_parents => OK");
    end test_number_of_parents;
 

@@ -185,6 +185,15 @@ end Count_Ancestors;
       return not Is_Null (Father) and not Is_Null (Mother);
    end Has_Two_Parents;
 
+   function Has_Only_One_Parent(Tree : in T_Arbre_Personnes) return boolean is
+      Father : T_Arbre_Personnes;
+      Mother : T_Arbre_Personnes;
+   begin
+      Father := Get_Father (Tree);
+      Mother := Get_Mother (Tree);
+      return (not Is_Null (Father) and Is_Null (Mother)) or (Is_Null (Father) and not Is_Null (Mother));
+   end Has_Only_One_Parent;
+
    function Nodes_With_Two_Parents(Tree : in T_Arbre_Personnes) return Ancestor_Array is
       function Nodes_With_Two_Parents_Generation(Tree : in T_Arbre_Personnes; Depth : Integer) return Ancestor_Array is
          Ancestors : Ancestor_Array(1 .. 2**(Depth-1));           -- Taille initiale
@@ -221,5 +230,37 @@ end Count_Ancestors;
    begin
       return Nodes_With_Two_Parents_Generation (Tree, Get_Tree_Depth(Tree));
    end Nodes_With_Two_Parents;
+
+   function Nodes_With_Only_One_Parent(Tree : in T_Arbre_Personnes) return Ancestor_Array is
+      function Nodes_With_Only_One_Parent_Generation(Tree : in T_Arbre_Personnes; Depth : Integer) return Ancestor_Array is
+         Ancestors : Ancestor_Array(1 .. 2**(Depth-1));           -- Taille initiale
+         Mother_Ancestors : Ancestor_Array(1 .. 2**(Depth-2));  -- Taille initiale
+         Father_Ancestors : Ancestor_Array(1 .. 2**(Depth-2));  -- Taille initiale
+         Father : T_Arbre_Personnes;
+         Mother : T_Arbre_Personnes;
+      begin 
+         if not Is_Null (Tree) then
+            if Has_Only_One_Parent (Tree) then
+               Ancestors(1) := Get_Value(Tree);
+            end if;
+            Mother := Get_Mother(Tree);
+            Father := Get_Father(Tree);
+            if not Is_Null (Mother) then 
+               Mother_Ancestors := Nodes_With_Only_One_Parent_Generation(Mother, Depth-1);
+               for i in Mother_Ancestors'Range loop 
+                  Ancestors(i + 1) := Mother_Ancestors(i);
+               end loop;
+            else
+               Father_Ancestors := Nodes_With_Only_One_Parent_Generation(Father, Depth-1);
+               for i in Father_Ancestors'Range loop
+                  Ancestors(i + 1) := Father_Ancestors(i);
+               end loop;
+            end if;
+         end if;
+         return Ancestors;
+      end Nodes_With_Only_One_Parent_Generation;
+   begin
+      return Nodes_With_Only_One_Parent_Generation (Tree, Get_Tree_Depth(Tree));
+   end Nodes_With_Only_One_Parent;
 
 end Arbre_Genealog;
