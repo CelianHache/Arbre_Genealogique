@@ -38,4 +38,11 @@ package Arbre_Genealog is
    
    function Count_Ancestors(Tree: in T_Arbre_Personnes; Id_Node : in String) return Integer;
 
+   function Nodes_With_Two_Parents(Tree : in T_Arbre_Personnes) return Ancestor_Array;
+
+   function Has_Two_Parents(Tree : in T_Arbre_Personnes) return boolean;
+
+   function Get_Tree_Depth(Tree: in T_Arbre_Personnes) return Integer;
+
+
 end Arbre_Genealog;
