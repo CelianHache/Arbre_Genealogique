@@ -20,14 +20,41 @@ package body Personne is
       P.Date_De_Deces := Date_Deces;
    end Initialise;
 
+
+   function Get_Name(P : in T_Personne) return access String is
+   begin 
+      if (P.Nom = null) then  
+         return new String'("");
+      end if;
+      return P.Nom;
+   end Get_Name;
+
+   function Get_First_Name(P : in T_Personne) return access String is
+   begin 
+      if (P.Prenom = null) then  
+         return new String'("");
+      end if;
+      return P.Prenom;
+   end Get_First_Name;
+
+   function Get_Gender(P : in T_Personne) return access String is 
+   begin 
+      if (P.Sexe = null) then  
+         return new String'("");
+      end if;
+      return P.Sexe;
+   end Get_Gender;
+
    -- Implémentation de la procédure Afficher
    procedure Display(P : in T_Personne) is
    begin
-      Put_Line("Prenom: " & P.Prenom.all);
-      Put_Line("Nom: " & P.Nom.all);
-      Put_Line("Sexe: " & P.Sexe.all);
-      Put_Line("Date de Naissance: " & Image(P.Date_De_Naissance));
-      Put_Line("Lieu de Naissance: " & P.Lieu_De_Naissance.all);
+      if (P.Prenom /= null and P.Nom /= null) then 
+         Put_Line("Prenom: " & P.Prenom.all);
+         Put_Line("Nom: " & P.Nom.all);
+         Put_Line("Sexe: " & P.Sexe.all);
+         Put_Line("Date de Naissance: " & Image(P.Date_De_Naissance));
+         Put_Line("Lieu de Naissance: " & P.Lieu_De_Naissance.all);
+      end if;
       if P.Date_De_Deces /= null then
          Put_Line("Date de Décès: " & Image(P.Date_De_Deces.all));
       end if;
