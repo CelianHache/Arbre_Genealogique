@@ -63,7 +63,7 @@ procedure tests is
       pragma Assert(not Is_Null (Family_Root));
       pragma Assert(Is_Null (Get_Left(Family_Root)));
       pragma Assert(Is_Null (Get_Right(Family_Root)));
-      Display_Family_Tree (Family_Root);
+      Put_Line("Test_arbre_minimal => OK");
    end test_arbre_minimal;
 
    procedure test_ajout_parent is 
@@ -81,7 +81,7 @@ procedure tests is
       pragma Assert(not Is_Null (Get_Mother(Family_Root)));
       Add_Father (Family_Root, Mother, "02");
       pragma Assert(not Is_Null (Get_Node_By_Id(Family_Root, "021")));
-      Display_Family_Tree (Family_Root);
+      Put_Line("Test_ajout_parent => OK");
    end test_ajout_parent;
 
    procedure test_ancestors_generation is       
@@ -150,9 +150,70 @@ procedure tests is
       Ancestors_Count := Count_Ancestors(Family_Root, "0112");
       pragma Assert(5 = Ancestors_Count);
 
-      Put_Line("test_comptage_ancetres => OK");
+      Put_Line("Test_comptage_ancetres => OK");
       
    end test_comptage_ancetres;
+
+   procedure test_number_of_parents is 
+      Family_Root : T_Arbre_Personnes;
+      Two_Parents: Ancestor_Array(1 .. 2**5); 
+      One_Parent: Ancestor_Array(1 .. 2**5); 
+      Without_Parent: Ancestor_Array(1 .. 2**5); 
+      Expected_Two_Parents: Ancestor_Array(1 .. 2**5); 
+      Expected_One_Parent: Ancestor_Array(1 .. 2**5); 
+      Expected_Without_Parent: Ancestor_Array(1 .. 2**5); 
+      P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20 : T_Personne;
+   begin
+      initialise_arbre (Family_Root);
+      P1 := Get_Value(Get_Node_By_Id (Family_Root, "0"));
+      P2 := Get_Value(Get_Node_By_Id (Family_Root, "01"));
+      P3 := Get_Value(Get_Node_By_Id (Family_Root, "02"));
+      P4 := Get_Value(Get_Node_By_Id (Family_Root, "011"));
+      P5 := Get_Value(Get_Node_By_Id (Family_Root, "012"));
+      P6 := Get_Value(Get_Node_By_Id (Family_Root, "021"));
+      P7 := Get_Value(Get_Node_By_Id (Family_Root, "022"));
+      P8 := Get_Value(Get_Node_By_Id (Family_Root, "0111"));
+      P9 := Get_Value(Get_Node_By_Id (Family_Root, "0112"));
+      P10 := Get_Value(Get_Node_By_Id (Family_Root, "0121"));
+      P11 := Get_Value(Get_Node_By_Id (Family_Root, "0122"));
+      P12 := Get_Value(Get_Node_By_Id (Family_Root, "01111"));
+      P13 := Get_Value(Get_Node_By_Id (Family_Root, "01112"));
+      P14 := Get_Value(Get_Node_By_Id (Family_Root, "01121"));
+      P15 := Get_Value(Get_Node_By_Id (Family_Root, "01122"));
+      P16 := Get_Value(Get_Node_By_Id (Family_Root, "011111"));
+      P17 := Get_Value(Get_Node_By_Id (Family_Root, "011122"));
+      P18 := Get_Value(Get_Node_By_Id (Family_Root, "011211"));
+      P19 := Get_Value(Get_Node_By_Id (Family_Root, "011222"));
+      P20 := Get_Value(Get_Node_By_Id (Family_Root, "01211"));
+      
+      Two_Parents := Nodes_With_Two_Parents (Family_Root);
+      One_Parent := Nodes_With_Only_One_Parent (Family_Root);
+      Without_Parent := Nodes_Without_Parent (Family_Root);
+      Expected_Two_Parents(1) := P1;
+      Expected_Two_Parents(2) := P2;
+      Expected_Two_Parents(3) := P3;
+      Expected_Two_Parents(4) := P4;
+      Expected_Two_Parents(5) := P5;
+      Expected_Two_Parents(6) := P8;
+      Expected_Two_Parents(7) := P9;
+      Expected_One_Parent(1) := P10;
+      Expected_One_Parent(2) := P12;
+      Expected_One_Parent(3) := P13;
+      Expected_One_Parent(4) := P14;
+      Expected_One_Parent(5) := P15;
+      Expected_Without_Parent(1) := P6;
+      Expected_Without_Parent(2) := P7;
+      Expected_Without_Parent(3) := P11;
+      Expected_Without_Parent(4) := P16;
+      Expected_Without_Parent(5) := P17;
+      Expected_Without_Parent(6) := P18;
+      Expected_Without_Parent(7) := P19;
+      Expected_Without_Parent(8) := P20;
+      pragma Assert(Equals(Two_Parents, Expected_Two_Parents));
+      pragma Assert(Equals(One_Parent, Expected_One_Parent));
+      pragma Assert(Equals(Without_Parent, Expected_Without_Parent));
+      Put_Line("Test_number_of_parents => OK");
+   end test_number_of_parents;
 
 begin
 
@@ -160,5 +221,5 @@ begin
    test_ajout_parent;
    test_ancestors_generation;
    test_comptage_ancetres;
-
+   test_number_of_parents;
 end tests;
