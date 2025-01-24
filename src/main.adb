@@ -1,44 +1,29 @@
-with Arbre_Bin;
-with Ada.Text_IO;
+with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
 with Ada.Calendar; use Ada.Calendar;
-with Arbre_Genealog;
+with Arbre_Genealog; use Arbre_Genealog;
 with Personne; use Personne;
 
+   with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+   with Ada.Strings.Unbounded.Text_IO; use Ada.Strings.Unbounded.Text_IO;
+
 procedure Main is
-
-   subtype Element_Type is Integer;
-
-   -- Définir les fonctions To_String pour les deux sous-types
-   function To_String_Element (X : Element_Type) return String is
-   begin
-      return Integer'Image(X);
-   end To_String_Element;
-
-   -- Instancier le package générique avec des associations positionnelles
-   package Integer_Tree is new Arbre_Bin (
-      Element_Type,
-      To_String_Element
-   );
-
-   use Integer_Tree;
-   use Ada.Text_IO;
-
-   Tree : T_Arbre;
-
-   Family_Tree : Arbre_Genealog.T_Arbre;
-   Personne : T_Personne;
-
    procedure Show_Menu is
    begin
+      Put_Line("");
       Put_Line("=== Menu ===");
-      Put_Line("1. Initialiser l'arbre (racine)");
-      Put_Line("2. Ajouter un nœud gauche");
-      Put_Line("3. Ajouter un nœud droit");
-      Put_Line("4. Supprimer le nœud gauche");
-      Put_Line("5. Supprimer le nœud droit");
-      Put_Line("6. Afficher l'arbre");
-      Put_Line("7. Quitter");
+      Put_Line("");
+      Put_Line("1. Create a minimal tree with a single root node");
+      Put_Line("2. Add a parent to a given node");
+      Put_Line("3. Get the number of ancestors of a given node");
+      Put_Line("4. Get all the ancestors from a specified generation");
+      Put_Line("5. Display tree from a given node");
+      Put_Line("6. Delete a node and its ancestors");
+      Put_Line("7. Get all individuals with a single parent");
+      Put_Line("8. Get all individuals with two parents");
+      Put_Line("9. Get all individuals without parent");
+      Put_Line("10. Exit");
+      Put_Line("");
    end Show_Menu;
 
    function Get_User_Input(Prompt : String) return Integer is
@@ -46,6 +31,7 @@ procedure Main is
    begin
       Put(Prompt);
       Get(Input);
+      Skip_Line;
       return Input;
    exception
       when others =>
@@ -53,94 +39,93 @@ procedure Main is
          return Get_User_Input(Prompt);
    end Get_User_Input;
 
+   procedure Get_String_Input(Prompt : String; Input: in out String) is
+      Last: Natural;
+   begin
+      Put(Prompt);
+      Get_Line(Input, Last); -- Lecture de l'entrée utilisateur   
+      if Last < 100 then
+         Input(Last + 1 .. Input'Last) := (others => ' ');
+      end if;
+   exception
+      when others =>
+         Put_Line("Entrée invalide. Veuillez réessayer.");
+         Skip_Line;
+         Get_String_Input(Prompt, Input); -- Redemande en cas d'erreur
+   end Get_String_Input;
+
+   procedure Create_Personne(Personne: out T_Personne) is
+      Name: String(1..15);
+      First_Name: String(1..15);
+      Gender: String(1..1);
+      Sex: String(1..5);
+   begin 
+      Get_String_Input ("Enter name : ", Name);
+      Get_String_Input ("Enter first name : ", First_Name);
+      Get_String_Input ("Enter gender (M/F) : ", Gender);
+      while Gender /= "M" and Gender /= "F" loop
+         Skip_Line;
+         Get_String_Input ("Error !!! Enter gender (M/F) : ", Gender) ;
+      end loop;
+      if Gender = "M" then
+         Sex := "Homme";
+      else
+         Sex := "Femme";
+      end if;
+      Initialise (Personne, First_Name, Name, Sex, new Time'(Time_Of(2000, 1, 2)), "Paris");
+   end Create_Personne;
+
+   procedure Create_Minimal_Tree(Tree: out T_Arbre_Personnes) is
+      Personne: T_Personne;
+   begin 
+      Create_Personne (Personne);
+      Create_Family_Tree (Tree, Personne);
+      Put_Line("Minimal tree created");
+      Display_Family_Tree (Tree);
+   end Create_Minimal_Tree; 
+
+   procedure Add_Parent(Tree: in out T_Arbre_Personnes) is
+      Parent: T_Personne;
+      Parent_Type: String(1..6);
+      Id: String(1..15);
+   begin
+      Get_String_Input ("Enter the ID of the node you want to give a parent : ", Id);
+      Get_String_Input ("Which parent (Mother/Father) : ", Parent_Type);
+      Skip_Line;
+      while Parent_Type /= "Mother" and Parent_Type /= "Father" loop
+         Skip_Line;
+         Get_String_Input ("Error !!! Which parent (Mother/Father) : ", Parent_Type);
+      end loop;
+      Create_Personne (Parent);
+      if Parent_Type = "Mother" then
+         Add_Mother (Tree , Parent, Id);
+      else
+         Add_Father (Tree , Parent, Id);
+      end if;
+      Display_Family_Tree (Tree);
+   end Add_Parent;
+
+
+   Main_Tree : T_Arbre_Personnes;
+
 begin
-   loop
+   loop 
       Show_Menu;
       declare
-         Choice : Integer := Get_User_Input("Votre choix : ");
+         Input : Integer := Get_User_Input ("Enter selection : ");
       begin
-         case Choice is
+         case Input is
             when 1 =>
-               if not Is_Null(Tree) then
-                  Put_Line("L'arbre a déjà une racine !");
-               else
-                  declare
-                     Value : Integer := Get_User_Input("Entrez la valeur de la racine : ");
-                     Id    : Natural := 1;
-                  begin
-                     Initialise(Tree, Id, Value);
-                     Put_Line("Racine initialisée.");
-                  end;
-               end if;
-
-            when 2 =>
-               if Is_Null(Tree) then
-                  Put_Line("L'arbre n'a pas de racine. Initialisez-le d'abord.");
-               else
-                  declare
-                     Value : Integer := Get_User_Input("Entrez la valeur du nœud gauche : ");
-                     Id    : Natural := 2;
-                  begin
-                     Add_Left(Tree, Id, Value);
-                     Put_Line("Nœud gauche ajouté.");
-                  end;
-               end if;
-
-            when 3 =>
-               if Is_Null(Tree) then
-                  Put_Line("L'arbre n'a pas de racine. Initialisez-le d'abord.");
-               else
-                  declare
-                     Value : Integer := Get_User_Input("Entrez la valeur du nœud droit : ");
-                     Id    : Natural := 3;
-                  begin
-                     Add_Right(Tree, Id, Value);
-                     Put_Line("Nœud droit ajouté.");
-                  end;
-               end if;
-
-            when 4 =>
-               if Is_Null(Tree) then
-                  Put_Line("L'arbre n'a pas de racine. Initialisez-le d'abord.");
-               elsif Is_Null(Get_Left(Tree)) then
-                  Put_Line("Le nœud gauche est déjà vide.");
-               else
-                  Remove_Left(Tree);
-                  Put_Line("Nœud gauche supprimé.");
-               end if;
-
-            when 5 =>
-               if Is_Null(Tree) then
-                  Put_Line("L'arbre n'a pas de racine. Initialisez-le d'abord.");
-               elsif Is_Null(Get_Right(Tree)) then
-                  Put_Line("Le nœud droit est déjà vide.");
-               else
-                  Remove_Right(Tree);
-                  Put_Line("Nœud droit supprimé.");
-               end if;
-
-            when 6 =>
-               if Is_Null(Tree) then
-                  Put_Line("L'arbre est vide.");
-               else
-                  -- Put_Line("Valeur de la racine : " & Integer'Image(Get_Value(Tree)));
-                  Display (Tree);
-               end if;
-
-            when 8 =>
-               Initialise(Personne, "Antoine", "Gouzy", "Homme", 
-                  Ada.Calendar.Time_Of(2003, 4, 14), "Libourne");
-
-               Arbre_Genealog.Create_Family_Tree(Family_Tree, 1, Personne);
-               Arbre_Genealog.Display_Family_Tree(Family_Tree);
-
-            when 7 =>
-               Put_Line("Au revoir !");
+               Create_Minimal_Tree (Main_Tree);
+            when 2 => 
+               Add_Parent(Main_Tree);
+            when 10 => 
+               Put_Line("Execution stopped !");
                exit;
-
-            when others =>
-               Put_Line("Choix invalide. Veuillez réessayer.");
+            when others => 
+               Put_Line("Invalid input, please retry !");
          end case;
       end;
+
    end loop;
 end Main;
