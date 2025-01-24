@@ -16,6 +16,8 @@ package Arbre_Genealog is
 
    procedure Display_Family_Tree(Tree : in T_Arbre_Personnes);
 
+   procedure Display_Family_Tree_From_Node(Tree : in T_Arbre_Personnes; Id_Node: String);
+
    function Get_Father (Tree : in T_Arbre_Personnes) return T_Arbre_Personnes;
 
    function Get_Mother (Tree : in T_Arbre_Personnes) return T_Arbre_Personnes;

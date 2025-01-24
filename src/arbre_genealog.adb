@@ -20,6 +20,14 @@ package body Arbre_Genealog is
       Display(Tree);
    end Display_Family_Tree;
 
+
+   procedure Display_Family_Tree_From_Node(Tree : in T_Arbre_Personnes; Id_Node: String) is
+      Tree_From_Node : T_Arbre_Personnes;
+   begin 
+      Tree_From_Node := Get_Node_By_Id(Tree, Id_Node);
+      Display_Family_Tree (Tree_From_Node);
+   end Display_Family_Tree_From_Node;
+
    function Get_Father (Tree : in T_Arbre_Personnes) return T_Arbre_Personnes is
       Father: T_Arbre_Personnes; 
    begin 
@@ -63,12 +71,14 @@ package body Arbre_Genealog is
 
    function Get_Node_By_Id (Tree : in T_Arbre_Personnes; Id_Child : String) return T_Arbre_Personnes is
       Temp_Tree: T_Arbre_Personnes;
+      Base_Id: String := Get_Id(Tree);
+      Path: String := Id_Child(Base_Id'Length + 1 .. Id_Child'Last);
    begin
       Temp_Tree := Tree;
-      for i in Id_Child'Range loop
-         if Id_Child(i) = '1' then
+      for i in Path'Range loop
+         if Path(i) = '1' then
             Temp_Tree := Get_Father(Temp_Tree);
-         elsif Id_Child(i) = '2' then
+         elsif Path(i) = '2' then
             Temp_Tree := Get_Mother(Temp_Tree);
          end if;
       end loop;

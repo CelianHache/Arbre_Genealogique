@@ -51,7 +51,11 @@ package body Arbre_Bin is
 
    function Get_Id (Tree : in T_Arbre) return String is 
    begin 
-      return Tree.Id.all;   
+      if not Is_Null (Tree) then
+         return Tree.Id.all;
+      else 
+         return "0";
+      end if;    
    end Get_Id;
 
    function Get_Left_Title (Tree : in T_Arbre) return String is 
