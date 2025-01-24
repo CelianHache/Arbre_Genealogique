@@ -62,7 +62,7 @@ package body Personne is
          Put_Line("Prenom: " & P.Prenom.all);
          Put_Line("Nom: " & P.Nom.all);
          Put_Line("Sexe: " & P.Sexe.all);
-         Put_Line("Date de Naissance: " & Image(P.Date_De_Naissance));
+         Put_Line("Date de Naissance: " & Image(P.Date_De_Naissance.all));
          Put_Line("Lieu de Naissance: " & P.Lieu_De_Naissance.all);
       end if;
       if P.Date_De_Deces /= null then
