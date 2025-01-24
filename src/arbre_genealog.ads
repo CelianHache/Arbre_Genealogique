@@ -5,7 +5,8 @@ package Arbre_Genealog is
 
    package Arbre_Personnes is new Arbre_Bin (
       Personne.T_Personne,
-      Personne.To_String
+      Personne.To_String,
+      Personne.Free_Element
    );
    use Arbre_Personnes;
 
@@ -40,6 +41,17 @@ package Arbre_Genealog is
    
    function Count_Ancestors(Tree: in T_Arbre_Personnes; Id_Node : in String) return Integer;
 
+   procedure Remove_Family_Member(Tree: in out T_Arbre_Personnes; Id_Node: in String);
+
+   procedure Remove_Father(Child: in out T_Arbre_Personnes);
+
+   procedure Remove_Mother(Child: in out T_Arbre_Personnes);
+
+   function Get_Child(Tree: in T_Arbre_Personnes; Id_Node : in String) return T_Arbre_Personnes with
+      Pre => Id_Node'Length > 1;
+
+   function Is_Father(Id_Node: in String) return Boolean;
+
    function Nodes_With_Two_Parents(Tree : in T_Arbre_Personnes) return Ancestor_Array;
 
    function Nodes_With_Only_One_Parent(Tree : in T_Arbre_Personnes) return Ancestor_Array;
@@ -53,6 +65,5 @@ package Arbre_Genealog is
    function Is_Orphan(Tree : in T_Arbre_Personnes) return boolean;
 
    function Get_Tree_Depth(Tree: in T_Arbre_Personnes) return Integer;
-
 
 end Arbre_Genealog;

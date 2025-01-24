@@ -1,6 +1,10 @@
 with Ada.Calendar.Formatting; use Ada.Calendar.Formatting;
+with Ada.Unchecked_Deallocation;
 
 package body Personne is
+
+   procedure Free_String is new Ada.Unchecked_Deallocation(String, String_Access);
+   procedure Free_Time is new Ada.Unchecked_Deallocation(Ada.Calendar.Time, Time_Access);
 
    -- Implémentation de la procédure Initialiser
    procedure Initialise
@@ -8,16 +12,22 @@ package body Personne is
       Prenom         : in String;
       Nom            : in String;
       Sexe           : in String;
-      Date_Naissance : in Ada.Calendar.Time;
+      Date_Naissance : Time_Access;
       Lieu_Naissance : in String;
-      Date_Deces     : access Ada.Calendar.Time := null) is
+      Date_Deces     : Time_Access := null) is
    begin
       P.Prenom := new String'(Prenom);
       P.Nom := new String'(Nom);
       P.Sexe := new String'(Sexe);
-      P.Date_De_Naissance := Date_Naissance;
+      P.Date_De_Naissance := new Ada.Calendar.Time'(Date_Naissance.all);
       P.Lieu_De_Naissance := new String'(Lieu_Naissance);
-      P.Date_De_Deces := Date_Deces;
+      
+      if Date_Deces /= null then
+         P.Date_De_Deces := new Ada.Calendar.Time'(Date_Deces.all);
+      else
+         P.Date_De_Deces := null;
+      end if;
+
    end Initialise;
 
 
@@ -67,9 +77,23 @@ package body Personne is
          & P.Nom.all & " | "
          & P.Sexe.all & " | "
          & P.Lieu_De_Naissance.all & " | "
-         & Image(P.Date_De_Naissance) & " | "
+         & Image(P.Date_De_Naissance.all) & " | "
          & (if P.Date_De_Deces /= null then Image(P.Date_De_Deces.all) & " |" else "");
 
    end To_String;
+
+   procedure Free_Element(P : in out T_Personne) is
+   begin
+      -- Libération de tous les pointeurs en mémoire des variables de la personne
+      Free_String(P.Prenom);
+      Free_String(P.Nom);
+      Free_String(P.Sexe);
+      Free_String(P.Lieu_De_Naissance);
+      Free_Time(P.Date_De_Naissance);
+      if P.Date_De_Deces /= null then
+         Free_Time(P.Date_De_Deces);
+      end if;
+end Free_Element;
+
 
 end Personne;

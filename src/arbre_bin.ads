@@ -1,6 +1,7 @@
 generic
    type Element_Type is private;
    with function To_String ( X : Element_Type) return String;
+   with procedure Free_Element(X : in out Element_Type);
 package Arbre_Bin is
 
    type T_Arbre is private;
@@ -18,6 +19,8 @@ package Arbre_Bin is
 
    -- Supprimer le successeur gauche
    procedure Remove_Left(Tree : in out T_Arbre);
+
+   procedure Remove(Tree : in out T_Arbre);
 
    -- Obtenir le successeur droit
    function Get_Right(Tree : in T_Arbre) return T_Arbre;
@@ -45,15 +48,16 @@ private
 
    type T_Noeud;
    type T_Arbre is access T_Noeud;
+   type String_Access is access String;
 
    type T_Noeud is
       record
-         Id          : access String;
+         Id          : String_Access;
          Value       : Element_Type; 
          Right       : T_Arbre;
          Left        : T_Arbre;
-         Right_title : access String;
-         Left_title  : access String; 
+         Right_title : String_Access;
+         Left_title  : String_Access; 
       end record;
 
 

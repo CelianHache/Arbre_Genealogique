@@ -1,7 +1,11 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with System.Storage_Elements; use System.Storage_Elements;
+with Ada.Unchecked_Deallocation;
 
 package body Arbre_Bin is
+
+   procedure Free_String is new Ada.Unchecked_Deallocation(String, String_Access);
+   procedure Free is new Ada.Unchecked_Deallocation(T_Noeud, T_Arbre);
 
    procedure Initialise(Tree : in out T_Arbre; Id : in String;  Value : in Element_Type; Left_Title : in String; Right_Title : in String) is
    begin
@@ -26,13 +30,55 @@ package body Arbre_Bin is
 
    procedure Remove_Left (Tree : in out T_Arbre) is
    begin
-      Tree.Left := null;
+      if not Is_Null(Tree.Left) then
+         -- Libération récursive du sous-arbre gauche
+         Remove_Left(Tree.Left);
+         Remove_Right(Tree.Left);
+
+         -- Libérer la mémoire associée aux champs internes
+         Free_String(Tree.Left.Id);
+         Free_String(Tree.Left.Right_title);
+         Free_String(Tree.Left.Left_title);
+         Free_Element (Tree.Left.Value);
+
+         -- Libérer la mémoire du sous-arbre gauche lui-même
+         Free(Tree.Left);
+      end if;
    end Remove_Left;
 
    procedure Remove_Right (Tree : in out T_Arbre) is 
    begin 
-      Tree.Right := null;
+      if not Is_Null(Tree.Right) then
+         -- Libération récursive du sous-arbre droit
+         Remove_Left(Tree.Right);
+         Remove_Right(Tree.Right);
+
+         -- Libérer la mémoire associée aux champs internes
+         Free_String(Tree.Right.Id);
+         Free_String(Tree.Right.Right_title);
+         Free_String(Tree.Right.Left_title);
+         Free_Element (Tree.Right.Value);
+         
+         -- Libérer la mémoire du sous-arbre droit lui-même
+         Free(Tree.Right);
+      end if;
    end Remove_Right;
+
+   procedure Remove (Tree : in out T_Arbre) is 
+   begin 
+      -- Libération récursive des sous-arbres
+      Remove_Right (Tree);
+      Remove_Left (Tree);
+
+      -- Libérer la mémoire associée aux champs internes
+      Free_String(Tree.Id);
+      Free_String(Tree.Right_title);
+      Free_String(Tree.Left_title);
+      Free_Element (Tree.Value);
+
+      -- Libérer la mémoire du sous-arbre lui-même
+      Free(Tree);
+   end Remove;
 
    function Get_Left (Tree : in T_Arbre) return T_Arbre is
    begin 

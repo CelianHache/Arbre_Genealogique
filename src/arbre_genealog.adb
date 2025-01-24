@@ -178,6 +178,58 @@ begin
    return 1 + Ancestors_Left + Ancestors_Right;
 end Count_Ancestors;
 
+procedure Remove_Family_Member(Tree : in out T_Arbre_Personnes; Id_Node : in String) is
+   Root, Child : T_Arbre_Personnes;
+   Value : T_Personne;
+begin
+   -- Supprimer la référence du noeud par l'enfant si différent de la racine
+   if (Id_Node'Length >= 2) then
+      Root := Get_Node_By_Id(Tree, Id_Node);
+      Child := Get_Child(Tree, Id_Node);
+      if Is_Father(Id_Node) then
+         Remove_Father(Child);
+      else
+         Remove_Mother(Child);
+      end if;
+   else 
+      -- Libérer les champs dynamiques dans la valeur `T_Personne` du nœud
+      Remove(Tree);
+   end if;
+
+end Remove_Family_Member;
+
+procedure Remove_Father(Child: in out T_Arbre_Personnes) is
+   Father_Personne : T_Personne;
+begin
+   Remove_Left(Child);
+end Remove_Father;
+
+procedure Remove_Mother(Child: in out T_Arbre_Personnes) is
+begin
+   Remove_Right(Child);
+end Remove_Mother;
+
+function Get_Child(Tree : in T_Arbre_Personnes; Id_Node : in String) return T_Arbre_Personnes is
+   Child: T_Arbre_Personnes;
+   Id_Child : String(1..Id_Node'Last-1); 
+begin 
+   Id_Child := Id_Node(Id_Node'First..Id_Node'Last - 1);
+   Child := Get_Node_By_Id(Tree, Id_Child); 
+   return Child;
+end Get_Child;
+
+function Is_Father(Id_Node : in String) return Boolean is
+   Last_Char: Character;
+begin
+   Last_Char := Id_Node(Id_Node'Last);
+
+   if Last_Char = '1' then
+      return True;
+   end if;
+
+   return False;
+end Is_Father;
+
    function Get_Tree_Depth(Tree: in T_Arbre_Personnes) return Integer is
    begin
       if Is_Null (Tree) then
