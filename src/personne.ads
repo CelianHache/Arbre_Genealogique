@@ -5,6 +5,7 @@ package Personne is
 
    -- Déclaration du type Personne
    type T_Personne is private;
+   type Time_Access is access Ada.Calendar.Time;
 
    -- Procédures pour gérer les objets Personne
 
@@ -13,22 +14,27 @@ package Personne is
       Prenom         : in String;
       Nom            : in String;
       Sexe           : in String;
-      Date_Naissance : in Ada.Calendar.Time;
+      Date_Naissance : Time_Access;
       Lieu_Naissance : in String;
-      Date_Deces     : access Ada.Calendar.Time := null);
+      Date_Deces     : Time_Access := null);
 
    procedure Display(P : in T_Personne);
 
    function To_String(P : in T_Personne) return String;
 
+   procedure Free_Element(P : in out T_Personne);
+
    private
+      
+      type String_Access is access String;
+
       type T_Personne is record
-         Prenom           : access String;
-         Nom              : access String;
-         Sexe             : access String;
-         Date_De_Naissance : Ada.Calendar.Time;
-         Lieu_De_Naissance : access String;
-         Date_De_Deces     : access Ada.Calendar.Time := null; -- access pour rendre la date de décès nullable
+         Prenom           : String_Access;
+         Nom              : String_Access;
+         Sexe             : String_Access;
+         Date_De_Naissance : Time_Access;
+         Lieu_De_Naissance : String_Access;
+         Date_De_Deces     : Time_Access := null; -- access pour rendre la date de décès nullable
       end record;
 
 end Personne;

@@ -10,26 +10,26 @@ procedure tests is
    procedure initialise_arbre (Family_Root : in out T_Arbre_Personnes) is
       P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20 : T_Personne;
    begin
-      Initialise(P1, "Antoine", "Gouzy", "Homme", Time_Of(1980, 4, 14), "Libourne");
-      Initialise(P2, "Marie", "Gouzy", "Femme", Time_Of(1985, 6, 21), "Libourne");
-      Initialise(P3, "Jean", "Gouzy", "Homme", Time_Of(2005, 2, 15), "Libourne");
-      Initialise(P4, "Sophie", "Gouzy", "Femme", Time_Of(2007, 8, 25), "Libourne");
-      Initialise(P5, "Luc", "Gouzy", "Homme", Time_Of(2009, 1, 30), "Libourne");
-      Initialise(P6, "Claire", "Gouzy", "Femme", Time_Of(2012, 3, 10), "Libourne");
-      Initialise(P7, "David", "Gouzy", "Homme", Time_Of(2015, 5, 22), "Libourne");
-      Initialise(P8, "Alice", "Gouzy", "Femme", Time_Of(1987, 11, 5), "Libourne");
-      Initialise(P9, "Philippe", "Gouzy", "Homme", Time_Of(1990, 3, 30), "Libourne");
-      Initialise(P10, "Julien", "Gouzy", "Homme", Time_Of(1993, 7, 14), "Libourne");
-      Initialise(P11, "Martine", "Gouzy", "Femme", Time_Of(1996, 12, 17), "Libourne");
-      Initialise(P12, "Nicolas", "Gouzy", "Homme", Time_Of(1999, 4, 21), "Libourne");
-      Initialise(P13, "Isabelle", "Gouzy", "Femme", Time_Of(2002, 9, 6), "Libourne");
-      Initialise(P14, "Thomas", "Gouzy", "Homme", Time_Of(2004, 10, 9), "Libourne");
-      Initialise(P15, "Emilie", "Gouzy", "Femme", Time_Of(2006, 2, 28), "Libourne");
-      Initialise(P16, "Vincent", "Gouzy", "Homme", Time_Of(2008, 5, 17), "Libourne");
-      Initialise(P17, "Camille", "Gouzy", "Femme", Time_Of(2010, 8, 23), "Libourne");
-      Initialise(P18, "Louis", "Gouzy", "Homme", Time_Of(2013, 1, 10), "Libourne");
-      Initialise(P19, "Elise", "Gouzy", "Femme", Time_Of(2016, 6, 15), "Libourne");
-      Initialise(P20, "Pierre", "Gouzy", "Homme", Time_Of(2018, 4, 2), "Libourne");
+      Initialise(P1, "Antoine", "Gouzy", "Homme", new Time'(Time_Of(1980, 4, 14)), "Libourne");
+      Initialise(P2, "Marie", "Gouzy", "Femme", new Time'(Time_Of(1985, 6, 21)), "Libourne");
+      Initialise(P3, "Jean", "Gouzy", "Homme", new Time'(Time_Of(2005, 2, 15)), "Libourne");
+      Initialise(P4, "Sophie", "Gouzy", "Femme", new Time'(Time_Of(2007, 8, 25)), "Libourne");
+      Initialise(P5, "Luc", "Gouzy", "Homme", new Time'(Time_Of(2009, 1, 30)), "Libourne");
+      Initialise(P6, "Claire", "Gouzy", "Femme", new Time'(Time_Of(2012, 3, 10)), "Libourne");
+      Initialise(P7, "David", "Gouzy", "Homme", new Time'(Time_Of(2015, 5, 22)), "Libourne");
+      Initialise(P8, "Alice", "Gouzy", "Femme", new Time'(Time_Of(1987, 11, 5)), "Libourne");
+      Initialise(P9, "Philippe", "Gouzy", "Homme", new Time'(Time_Of(1990, 3, 30)), "Libourne");
+      Initialise(P10, "Julien", "Gouzy", "Homme", new Time'(Time_Of(1993, 7, 14)), "Libourne");
+      Initialise(P11, "Martine", "Gouzy", "Femme", new Time'(Time_Of(1996, 12, 17)), "Libourne");
+      Initialise(P12, "Nicolas", "Gouzy", "Homme", new Time'(Time_Of(1999, 4, 21)), "Libourne");
+      Initialise(P13, "Isabelle", "Gouzy", "Femme", new Time'(Time_Of(2002, 9, 6)), "Libourne");
+      Initialise(P14, "Thomas", "Gouzy", "Homme", new Time'(Time_Of(2004, 10, 9)), "Libourne");
+      Initialise(P15, "Emilie", "Gouzy", "Femme", new Time'(Time_Of(2006, 2, 28)), "Libourne");
+      Initialise(P16, "Vincent", "Gouzy", "Homme", new Time'(Time_Of(2008, 5, 17)), "Libourne");
+      Initialise(P17, "Camille", "Gouzy", "Femme", new Time'(Time_Of(2010, 8, 23)), "Libourne");
+      Initialise(P18, "Louis", "Gouzy", "Homme", new Time'(Time_Of(2013, 1, 10)), "Libourne");
+      Initialise(P19, "Elise", "Gouzy", "Femme", new Time'(Time_Of(2016, 6, 15)), "Libourne");
+      Initialise(P20, "Pierre", "Gouzy", "Homme", new Time'(Time_Of(2018, 4, 2)), "Libourne");
 
       Create_Family_Tree (Family_Root, P1);
       Add_Mother (Family_Root, P2);
@@ -58,7 +58,7 @@ procedure tests is
       Personne : T_Personne;
    begin
       pragma Assert(Is_Null(Family_Root)); 
-      Initialise(Personne, "Antoine", "Gouzy", "Homme", Ada.Calendar.Time_Of(2003, 4, 14), "Libourne");
+      Initialise(Personne, "Antoine", "Gouzy", "Homme", new Time'(Time_Of(2003, 4, 14)), "Libourne");
       Create_Family_Tree(Family_Root, Personne);
       pragma Assert(not Is_Null (Family_Root));
       pragma Assert(Is_Null (Get_Left(Family_Root)));
@@ -72,8 +72,8 @@ procedure tests is
       Mother: T_Personne;
    begin
       pragma Assert(Is_Null(Family_Root)); 
-      Initialise(Antoine, "Antoine", "Gouzy", "Homme", Ada.Calendar.Time_Of(2003, 4, 14), "Libourne");
-      Initialise(Mother, "Mamam", "Gouzy", "Femme", Ada.Calendar.Time_Of(1973, 5, 15), "Libourne");
+      Initialise(Antoine, "Antoine", "Gouzy", "Homme", new Time'(Time_Of(2003, 4, 14)), "Libourne");
+      Initialise(Mother, "Mamam", "Gouzy", "Femme", new Time'(Time_Of(1973, 5, 15)), "Libourne");
       Create_Family_Tree(Family_Root, Antoine);
       pragma Assert(not Is_Null (Family_Root));
       Add_Mother (Family_Root, Mother);
@@ -107,10 +107,40 @@ procedure tests is
       
    end test_comptage_ancetres;
 
+   procedure test_remove_node is
+      Family_Root : T_Arbre_Personnes;
+      Ancestors_Count : Integer := 0;
+   begin
+      -- Test suppression de l'arbre complet
+      initialise_arbre (Family_Root);
+      Ancestors_Count := Count_Ancestors(Family_Root, "0");
+      pragma Assert(20 = Ancestors_Count);
+
+      Remove_Family_Member (Family_Root, "0");
+
+      Ancestors_Count := Count_Ancestors(Family_Root, "0");
+      pragma Assert(0 = Ancestors_Count);
+
+      -- Test suppression à partir d'un noeud donné
+      initialise_arbre (Family_Root);
+      Ancestors_Count := Count_Ancestors(Family_Root, "0");
+      pragma Assert(20 = Ancestors_Count);
+
+      Remove_Family_Member (Family_Root, "012");
+
+      Ancestors_Count := Count_Ancestors(Family_Root, "0");
+      pragma Assert(16 = Ancestors_Count);
+
+      Put_Line("test_remove_node => OK");
+      
+   end test_remove_node;
+
+
 begin
 
    test_arbre_minimal;
    test_ajout_parent;
    test_comptage_ancetres;
+   test_remove_node;
 
 end tests;
