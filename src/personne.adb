@@ -84,7 +84,6 @@ package body Personne is
 
    procedure Free_Element(P : in out T_Personne) is
    begin
-      -- Libération de tous les pointeurs en mémoire des variables de la personne
       Free_String(P.Prenom);
       Free_String(P.Nom);
       Free_String(P.Sexe);
