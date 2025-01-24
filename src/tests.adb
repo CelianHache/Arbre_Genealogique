@@ -32,25 +32,25 @@ procedure tests is
       Initialise(P20, "Pierre", "Gouzy", "Homme", new Time'(Time_Of(2018, 4, 2)), "Libourne");
 
       Create_Family_Tree (Family_Root, P1);
-      Add_Mother (Family_Root, P2);
-      Add_Father (Family_Root, P3);
-      Add_Father (Family_Root, P4,     "01");
-      Add_Mother (Family_Root, P5,     "01");
-      Add_Father (Family_Root, P6,     "02");
-      Add_Mother (Family_Root, P7,     "02");
-      Add_Father (Family_Root, P8,     "011");
-      Add_Mother (Family_Root, P9,     "011");
-      Add_Father (Family_Root, P10,    "012");
-      Add_Mother (Family_Root, P11,    "012");
-      Add_Father (Family_Root, P12,    "0111");
-      Add_Mother (Family_Root, P13,    "0111");
-      Add_Father (Family_Root, P14,    "0112");
-      Add_Mother (Family_Root, P15,    "0112");
-      Add_Father (Family_Root, P16,    "01111");
-      Add_Mother (Family_Root, P17,    "01112");
-      Add_Father (Family_Root, P18,    "01121");
-      Add_Mother (Family_Root, P19,    "01122");
-      Add_Father (Family_Root, P20,    "0121");
+      Add_Father (Family_Root, P2);             --01
+      Add_Mother (Family_Root, P3);             --02
+      Add_Father (Family_Root, P4,     "01");   --011
+      Add_Mother (Family_Root, P5,     "01");   --012
+      Add_Father (Family_Root, P6,     "02");   --021
+      Add_Mother (Family_Root, P7,     "02");   --022
+      Add_Father (Family_Root, P8,     "011");  --0111
+      Add_Mother (Family_Root, P9,     "011");  --0112
+      Add_Father (Family_Root, P10,    "012");  --0121
+      Add_Mother (Family_Root, P11,    "012");  --0122
+      Add_Father (Family_Root, P12,    "0111"); --01111
+      Add_Mother (Family_Root, P13,    "0111"); --01112
+      Add_Father (Family_Root, P14,    "0112"); --01121
+      Add_Mother (Family_Root, P15,    "0112"); --01122
+      Add_Father (Family_Root, P16,    "01111");--011111
+      Add_Mother (Family_Root, P17,    "01112");--011112
+      Add_Father (Family_Root, P18,    "01121");--011211
+      Add_Mother (Family_Root, P19,    "01122");--011222
+      Add_Father (Family_Root, P20,    "0121"); --01211
    end initialise_arbre;
 
    procedure test_arbre_minimal is
@@ -63,7 +63,7 @@ procedure tests is
       pragma Assert(not Is_Null (Family_Root));
       pragma Assert(Is_Null (Get_Left(Family_Root)));
       pragma Assert(Is_Null (Get_Right(Family_Root)));
-      Display_Family_Tree (Family_Root);
+      Put_Line("Test_arbre_minimal => OK");
    end test_arbre_minimal;
 
    procedure test_ajout_parent is 
@@ -81,8 +81,55 @@ procedure tests is
       pragma Assert(not Is_Null (Get_Mother(Family_Root)));
       Add_Father (Family_Root, Mother, "02");
       pragma Assert(not Is_Null (Get_Node_By_Id(Family_Root, "021")));
-      Display_Family_Tree (Family_Root);
+      Put_Line("Test_ajout_parent => OK");
    end test_ajout_parent;
+
+   procedure test_ancestors_generation is       
+      Family_Root : T_Arbre_Personnes;
+      P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11: T_Personne;
+      Ancestors_List_0 : Ancestor_Array(1 .. 1); 
+      Expected_Ancestors_List_0 : Ancestor_Array(1 .. 1); 
+      Ancestors_List_1 : Ancestor_Array(1 .. 2); 
+      Expected_Ancestors_List_1 : Ancestor_Array(1 .. 2); 
+      Ancestors_List_2 : Ancestor_Array(1 .. 4); 
+      Expected_Ancestors_List_2 : Ancestor_Array(1 .. 4); 
+      Ancestors_List_3 : Ancestor_Array(1 .. 8); 
+      Expected_Ancestors_List_3 : Ancestor_Array(1 .. 8); 
+   begin
+      pragma Assert(Is_Null(Family_Root));  
+      initialise_arbre(Family_Root);
+      P1 := Get_Value(Get_Node_By_Id (Family_Root, "0"));
+      P2 := Get_Value(Get_Node_By_Id (Family_Root, "01"));
+      P3 := Get_Value(Get_Node_By_Id (Family_Root, "02"));
+      P4 := Get_Value(Get_Node_By_Id (Family_Root, "011"));
+      P5 := Get_Value(Get_Node_By_Id (Family_Root, "012"));
+      P6 := Get_Value(Get_Node_By_Id (Family_Root, "021"));
+      P7 := Get_Value(Get_Node_By_Id (Family_Root, "022"));
+      P8 := Get_Value(Get_Node_By_Id (Family_Root, "0111"));
+      P9 := Get_Value(Get_Node_By_Id (Family_Root, "0112"));
+      P10 := Get_Value(Get_Node_By_Id (Family_Root, "0121"));
+      P11 := Get_Value(Get_Node_By_Id (Family_Root, "0122"));
+      Ancestors_List_0 := Get_Ancestors_Generation (Family_Root, 0);
+      Expected_Ancestors_List_0(1) := P1;
+      pragma Assert(Equals(Expected_Ancestors_List_0, Ancestors_List_0)); 
+      Ancestors_List_1 := Get_Ancestors_Generation (Family_Root, 1);
+      Expected_Ancestors_List_1(1) := P2;
+      Expected_Ancestors_List_1(2) := P3;
+      pragma Assert(Equals(Expected_Ancestors_List_1, Ancestors_List_1)); 
+      Ancestors_List_2 := Get_Ancestors_Generation (Family_Root, 2);
+      Expected_Ancestors_List_2(1) := P4;
+      Expected_Ancestors_List_2(2) := P5;
+      Expected_Ancestors_List_2(3) := P6;
+      Expected_Ancestors_List_2(4) := P7;
+      pragma Assert(Equals(Expected_Ancestors_List_2, Ancestors_List_2)); 
+      Ancestors_List_3 := Get_Ancestors_Generation (Family_Root, 3); 
+      Expected_Ancestors_List_3(1) := P8;
+      Expected_Ancestors_List_3(2) := P9;
+      Expected_Ancestors_List_3(3) := P10;
+      Expected_Ancestors_List_3(4) := P11;
+      pragma Assert(Equals(Expected_Ancestors_List_3, Ancestors_List_3));  
+      Put_Line("Test_ancestors_generation => OK");    
+   end test_ancestors_generation;
 
    procedure test_comptage_ancetres is
       Family_Root : T_Arbre_Personnes;
@@ -103,7 +150,7 @@ procedure tests is
       Ancestors_Count := Count_Ancestors(Family_Root, "0112");
       pragma Assert(5 = Ancestors_Count);
 
-      Put_Line("test_comptage_ancetres => OK");
+      Put_Line("Test_comptage_ancetres => OK");
       
    end test_comptage_ancetres;
 
@@ -135,12 +182,73 @@ procedure tests is
       
    end test_remove_node;
 
+   procedure test_number_of_parents is 
+      Family_Root : T_Arbre_Personnes;
+      Two_Parents: Ancestor_Array(1 .. 2**5); 
+      One_Parent: Ancestor_Array(1 .. 2**5); 
+      Without_Parent: Ancestor_Array(1 .. 2**5); 
+      Expected_Two_Parents: Ancestor_Array(1 .. 2**5); 
+      Expected_One_Parent: Ancestor_Array(1 .. 2**5); 
+      Expected_Without_Parent: Ancestor_Array(1 .. 2**5); 
+      P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, P14, P15, P16, P17, P18, P19, P20 : T_Personne;
+   begin
+      initialise_arbre (Family_Root);
+      P1 := Get_Value(Get_Node_By_Id (Family_Root, "0"));
+      P2 := Get_Value(Get_Node_By_Id (Family_Root, "01"));
+      P3 := Get_Value(Get_Node_By_Id (Family_Root, "02"));
+      P4 := Get_Value(Get_Node_By_Id (Family_Root, "011"));
+      P5 := Get_Value(Get_Node_By_Id (Family_Root, "012"));
+      P6 := Get_Value(Get_Node_By_Id (Family_Root, "021"));
+      P7 := Get_Value(Get_Node_By_Id (Family_Root, "022"));
+      P8 := Get_Value(Get_Node_By_Id (Family_Root, "0111"));
+      P9 := Get_Value(Get_Node_By_Id (Family_Root, "0112"));
+      P10 := Get_Value(Get_Node_By_Id (Family_Root, "0121"));
+      P11 := Get_Value(Get_Node_By_Id (Family_Root, "0122"));
+      P12 := Get_Value(Get_Node_By_Id (Family_Root, "01111"));
+      P13 := Get_Value(Get_Node_By_Id (Family_Root, "01112"));
+      P14 := Get_Value(Get_Node_By_Id (Family_Root, "01121"));
+      P15 := Get_Value(Get_Node_By_Id (Family_Root, "01122"));
+      P16 := Get_Value(Get_Node_By_Id (Family_Root, "011111"));
+      P17 := Get_Value(Get_Node_By_Id (Family_Root, "011122"));
+      P18 := Get_Value(Get_Node_By_Id (Family_Root, "011211"));
+      P19 := Get_Value(Get_Node_By_Id (Family_Root, "011222"));
+      P20 := Get_Value(Get_Node_By_Id (Family_Root, "01211"));
+      
+      Two_Parents := Nodes_With_Two_Parents (Family_Root);
+      One_Parent := Nodes_With_Only_One_Parent (Family_Root);
+      Without_Parent := Nodes_Without_Parent (Family_Root);
+      Expected_Two_Parents(1) := P1;
+      Expected_Two_Parents(2) := P2;
+      Expected_Two_Parents(3) := P3;
+      Expected_Two_Parents(4) := P4;
+      Expected_Two_Parents(5) := P5;
+      Expected_Two_Parents(6) := P8;
+      Expected_Two_Parents(7) := P9;
+      Expected_One_Parent(1) := P10;
+      Expected_One_Parent(2) := P12;
+      Expected_One_Parent(3) := P13;
+      Expected_One_Parent(4) := P14;
+      Expected_One_Parent(5) := P15;
+      Expected_Without_Parent(1) := P6;
+      Expected_Without_Parent(2) := P7;
+      Expected_Without_Parent(3) := P11;
+      Expected_Without_Parent(4) := P16;
+      Expected_Without_Parent(5) := P17;
+      Expected_Without_Parent(6) := P18;
+      Expected_Without_Parent(7) := P19;
+      Expected_Without_Parent(8) := P20;
+      pragma Assert(Equals(Two_Parents, Expected_Two_Parents));
+      pragma Assert(Equals(One_Parent, Expected_One_Parent));
+      pragma Assert(Equals(Without_Parent, Expected_Without_Parent));
+      Put_Line("Test_number_of_parents => OK");
+   end test_number_of_parents;
 
 begin
 
    test_arbre_minimal;
    test_ajout_parent;
+   test_ancestors_generation;
    test_comptage_ancetres;
    test_remove_node;
-
+   test_number_of_parents;
 end tests;

@@ -23,6 +23,9 @@ package Personne is
    function To_String(P : in T_Personne) return String;
 
    procedure Free_Element(P : in out T_Personne);
+   function Get_Name(P : in T_Personne) return access String;
+   function Get_First_Name(P : in T_Personne) return access String;
+   function Get_Gender(P : in T_Personne) return access String;
 
    private
       

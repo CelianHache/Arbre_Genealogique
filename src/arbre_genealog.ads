@@ -11,10 +11,13 @@ package Arbre_Genealog is
    use Arbre_Personnes;
 
    type T_Arbre_Personnes is new T_Arbre;
+   type Ancestor_Array is array (Positive range <>) of Personne.T_Personne;  -- Tableau de taille dynamique
 
    procedure Create_Family_Tree(Root : in out T_Arbre_Personnes; Root_Value : Personne.T_Personne);
 
    procedure Display_Family_Tree(Tree : in T_Arbre_Personnes);
+
+   procedure Display_Family_Tree_From_Node(Tree : in T_Arbre_Personnes; Id_Node: String);
 
    function Get_Father (Tree : in T_Arbre_Personnes) return T_Arbre_Personnes;
 
@@ -30,6 +33,12 @@ package Arbre_Genealog is
 
    function Get_Node_By_Id (Tree : in T_Arbre_Personnes; Id_Child : String) return T_Arbre_Personnes;
 
+   function Get_Ancestors_Generation (Tree : in T_Arbre_Personnes; Generation: Integer) return Ancestor_Array;
+
+   function Get_Sorted_Ancestor_Array(List : in Ancestor_Array) return Ancestor_Array;
+
+   function Equals(Array1 : in Ancestor_Array; Array2 : in Ancestor_Array) return boolean;
+   
    function Count_Ancestors(Tree: in T_Arbre_Personnes; Id_Node : in String) return Integer;
 
    procedure Remove_Family_Member(Tree: in out T_Arbre_Personnes; Id_Node: in String);
@@ -42,5 +51,19 @@ package Arbre_Genealog is
       Pre => Id_Node'Length > 1;
 
    function Is_Father(Id_Node: in String) return Boolean;
+
+   function Nodes_With_Two_Parents(Tree : in T_Arbre_Personnes) return Ancestor_Array;
+
+   function Nodes_With_Only_One_Parent(Tree : in T_Arbre_Personnes) return Ancestor_Array;
+
+   function Nodes_Without_Parent(Tree : in T_Arbre_Personnes) return Ancestor_Array;
+
+   function Has_Two_Parents(Tree : in T_Arbre_Personnes) return boolean;
+
+   function Has_Only_One_Parent(Tree : in T_Arbre_Personnes) return boolean;
+
+   function Is_Orphan(Tree : in T_Arbre_Personnes) return boolean;
+
+   function Get_Tree_Depth(Tree: in T_Arbre_Personnes) return Integer;
 
 end Arbre_Genealog;
