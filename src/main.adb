@@ -136,7 +136,7 @@ procedure Main is
    end Delete_A_Node;
 
    procedure Get_Single_Parent(Tree: in T_Arbre_Personnes) is
-      Nodes : Ancestor_Array(1..Count_Ancestors (Tree, "0"));
+      Nodes : Ancestor_Array(1..2**(Get_Tree_Depth (Tree)-1));
    begin
       Nodes := Nodes_With_Only_One_Parent (Tree);
       for I in Nodes'Range loop
@@ -144,8 +144,8 @@ procedure Main is
       end loop;
    end Get_Single_Parent;
 
-      procedure Get_Both_Parents(Tree: in T_Arbre_Personnes) is
-      Nodes : Ancestor_Array(1..Count_Ancestors (Tree, "0"));
+   procedure Get_Both_Parents(Tree: in T_Arbre_Personnes) is
+      Nodes : Ancestor_Array(1..2**(Get_Tree_Depth (Tree)-1));
    begin
       Nodes := Nodes_With_Two_Parents (Tree);
       for I in Nodes'Range loop
@@ -182,6 +182,8 @@ begin
                Get_Single_Parent(Main_Tree);
             when 8 => 
                Get_Both_Parents(Main_Tree);
+            --  when 9 => 
+               --  Get_Orphans(Main_Tree);
             when 10 => 
                Ada.Text_IO.Put_Line("Execution stopped !");
                exit;
