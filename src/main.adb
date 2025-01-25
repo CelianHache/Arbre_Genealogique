@@ -100,7 +100,7 @@ procedure Main is
       Display_Family_Tree (Tree);
    end Add_Parent;
 
-   procedure Get_Number_Ancestors(Tree : T_Arbre_Personnes) is
+   procedure Get_Number_Ancestors(Tree : in out T_Arbre_Personnes) is
       Id: Unbounded_String;
       Number_of_ancestors : Integer;
    begin
@@ -110,7 +110,7 @@ procedure Main is
       Ada.Text_IO.Put_Line("Number of ancestors : " & Integer'Image(Number_of_ancestors));
    end Get_Number_Ancestors;
 
-   procedure Get_All_Ancestors(Tree : T_Arbre_Personnes; Generation : Integer) is
+   procedure Get_All_Ancestors(Tree : in out T_Arbre_Personnes; Generation : in Integer) is
       Ancestors : Ancestor_Array(1..2**Generation);
    begin
       Ancestors := Get_Ancestors_Generation (Tree, Generation);
@@ -120,12 +120,21 @@ procedure Main is
 
    end Get_All_Ancestors;
 
-   procedure Display_Tree(Tree : T_Arbre_Personnes) is
+   procedure Display_Tree(Tree : in T_Arbre_Personnes) is
       Id: Unbounded_String;
    begin
       Get_String_Input ("Enter the ID of the node : ", Id);
       Display_Family_Tree_From_Node (Tree, To_String(Id));
    end Display_Tree;
+
+   procedure Delete_A_Node(Tree : in out T_Arbre_Personnes) is 
+      Id : Unbounded_String;
+   begin
+      Get_String_Input ("Enter the ID of the node : ", Id);
+      Remove_Family_Member (Tree, To_String(Id));
+      Display_Family_Tree (Tree);
+   end Delete_A_Node;
+      
 
 
    Main_Tree : T_Arbre_Personnes;
@@ -149,6 +158,8 @@ begin
                Get_All_Ancestors (Main_Tree, Generation);
             when 5 => 
                Display_Tree(Main_Tree);
+            when 6 =>
+               Delete_A_Node(Main_Tree);
             when 10 => 
                Ada.Text_IO.Put_Line("Execution stopped !");
                exit;
