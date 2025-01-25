@@ -134,6 +134,15 @@ procedure Main is
       Remove_Family_Member (Tree, To_String(Id));
       Display_Family_Tree (Tree);
    end Delete_A_Node;
+
+   procedure Get_Single_Parent(Tree: in T_Arbre_Personnes) is
+      Nodes : Ancestor_Array(1..Count_Ancestors (Tree, "0"));
+   begin
+      Nodes := Nodes_With_Only_One_Parent (Tree);
+      for I in Nodes'Range loop
+         Display (Nodes(i));
+      end loop;
+   end Get_Single_Parent;
       
 
 
@@ -160,6 +169,8 @@ begin
                Display_Tree(Main_Tree);
             when 6 =>
                Delete_A_Node(Main_Tree);
+            when 7 => 
+               Get_Single_Parent(Main_Tree);
             when 10 => 
                Ada.Text_IO.Put_Line("Execution stopped !");
                exit;
