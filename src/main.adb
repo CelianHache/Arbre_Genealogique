@@ -110,8 +110,19 @@ procedure Main is
       Ada.Text_IO.Put_Line("Number of ancestors : " & Integer'Image(Number_of_ancestors));
    end Get_Number_Ancestors;
 
+   procedure Get_All_Ancestors(Tree : T_Arbre_Personnes; Generation : Integer) is
+      Ancestors : Ancestor_Array(1..2**Generation);
+   begin
+      Ancestors := Get_Ancestors_Generation (Tree, Generation);
+      for I in Ancestors'Range loop
+         Display (Ancestors(I));
+      end loop;
+
+   end Get_All_Ancestors;
+
 
    Main_Tree : T_Arbre_Personnes;
+   Generation : Integer;
 
 begin
    loop 
@@ -126,6 +137,9 @@ begin
                Add_Parent(Main_Tree);
             when 3 =>
                Get_Number_Ancestors(Main_Tree);
+            when 4 => 
+               Generation := Get_User_Input ("Enter the number of the desired generation : ");
+               Get_All_Ancestors (Main_Tree, Generation);
             when 10 => 
                Ada.Text_IO.Put_Line("Execution stopped !");
                exit;
