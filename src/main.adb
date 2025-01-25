@@ -120,6 +120,13 @@ procedure Main is
 
    end Get_All_Ancestors;
 
+   procedure Display_Tree(Tree : T_Arbre_Personnes) is
+      Id: Unbounded_String;
+   begin
+      Get_String_Input ("Enter the ID of the node : ", Id);
+      Display_Family_Tree_From_Node (Tree, To_String(Id));
+   end Display_Tree;
+
 
    Main_Tree : T_Arbre_Personnes;
    Generation : Integer;
@@ -140,6 +147,8 @@ begin
             when 4 => 
                Generation := Get_User_Input ("Enter the number of the desired generation : ");
                Get_All_Ancestors (Main_Tree, Generation);
+            when 5 => 
+               Display_Tree(Main_Tree);
             when 10 => 
                Ada.Text_IO.Put_Line("Execution stopped !");
                exit;
