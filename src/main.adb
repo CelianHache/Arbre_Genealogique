@@ -100,6 +100,16 @@ procedure Main is
       Display_Family_Tree (Tree);
    end Add_Parent;
 
+   procedure Get_Number_Ancestors(Tree : T_Arbre_Personnes) is
+      Id: Unbounded_String;
+      Number_of_ancestors : Integer;
+   begin
+      Get_String_Input ("Enter the ID of the node : ", Id);
+      Number_of_ancestors := Count_Ancestors (Tree, To_String(Id));
+      Display_Family_Tree_From_Node (Tree, To_String(Id));
+      Ada.Text_IO.Put_Line("Number of ancestors : " & Integer'Image(Number_of_ancestors));
+   end Get_Number_Ancestors;
+
 
    Main_Tree : T_Arbre_Personnes;
 
@@ -114,6 +124,8 @@ begin
                Create_Minimal_Tree (Main_Tree);
             when 2 => 
                Add_Parent(Main_Tree);
+            when 3 =>
+               Get_Number_Ancestors(Main_Tree);
             when 10 => 
                Ada.Text_IO.Put_Line("Execution stopped !");
                exit;
