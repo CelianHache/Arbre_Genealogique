@@ -83,7 +83,7 @@ package body Arbre_Genealog is
             -- R3 - Replace current tree by the father's tree
             Temp_Tree := Get_Father(Temp_Tree);
          elsif Path(i) = '2' then
-            -- R3 - Replace current tree by the moyther's tree
+            -- R3 - Replace current tree by the mother's tree
             Temp_Tree := Get_Mother(Temp_Tree);
          end if;
       end loop;
