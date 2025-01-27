@@ -30,53 +30,35 @@ package body Arbre_Bin is
 
    procedure Remove_Left (Tree : in out T_Arbre) is
    begin
+   -- R0 - Remove left node of a tree
       if not Is_Null(Tree.Left) then
-         -- Libération récursive du sous-arbre gauche
-         Remove_Left(Tree.Left);
-         Remove_Right(Tree.Left);
-
-         -- Libérer la mémoire associée aux champs internes
-         Free_String(Tree.Left.Id);
-         Free_String(Tree.Left.Right_title);
-         Free_String(Tree.Left.Left_title);
-         Free_Element (Tree.Left.Value);
-
-         -- Libérer la mémoire du sous-arbre gauche lui-même
-         Free(Tree.Left);
+         Remove (Tree.Left);
       end if;
    end Remove_Left;
 
    procedure Remove_Right (Tree : in out T_Arbre) is 
    begin 
+   -- R0 - Remove right node of a tree
       if not Is_Null(Tree.Right) then
-         -- Libération récursive du sous-arbre droit
-         Remove_Left(Tree.Right);
-         Remove_Right(Tree.Right);
-
-         -- Libérer la mémoire associée aux champs internes
-         Free_String(Tree.Right.Id);
-         Free_String(Tree.Right.Right_title);
-         Free_String(Tree.Right.Left_title);
-         Free_Element (Tree.Right.Value);
-         
-         -- Libérer la mémoire du sous-arbre droit lui-même
-         Free(Tree.Right);
+         Remove (Tree.Right);
       end if;
    end Remove_Right;
 
    procedure Remove (Tree : in out T_Arbre) is 
    begin 
-      -- Libération récursive des sous-arbres
+   -- R0 - Remove a tree
+      -- R1 - Remove recursively right node of the tree
       Remove_Right (Tree);
+      -- R1 - Remove recursively left node of the tree
       Remove_Left (Tree);
 
-      -- Libérer la mémoire associée aux champs internes
+      -- R1 - Free memory of each variable
       Free_String(Tree.Id);
       Free_String(Tree.Right_title);
       Free_String(Tree.Left_title);
-      Free_Element (Tree.Value);
+      Free_Element(Tree.Value);
 
-      -- Libérer la mémoire du sous-arbre lui-même
+      -- R1 - Free memory for the node itself
       Free(Tree);
    end Remove;
 
@@ -120,23 +102,29 @@ package body Arbre_Bin is
       return Tree = null;
    end Is_Null; 
 
-   -- Afficher un nœud
    procedure Display(Tree : in T_Arbre) is
       procedure Display_Space(Tree : in T_Arbre; Space: Integer; name: String) is
       begin
+         -- R0 - Display with indentation the differents generations
          Put_Line("");
+            -- R1 - Put some indentation in tune with generation level
             for I in 0 .. Space loop
                Put("  ");
             end loop;
+            -- R1 - Put the node and his children
             if not Is_Null (Tree) then
                Put("-- " & name & " : " & Tree.Id.all & " > " & To_String (Tree.Value));
+               -- R2 - Display left side of the tree
                Display_Space (Tree.Left, Space + 1, Tree.Left_title.all);
+               -- R2 - Display right side of the tree
                Display_Space (Tree.Right, Space + 1, Tree.Right_title.all);
             else 
                Put("-- " & name & " : Empty");
          end if;
       end Display_Space;
    begin
+   -- R0 - Display tree on console 
+      -- R1 - Display tree from the root 
       Display_Space (Tree, 0, "root");
       Put_Line("");
       Put_Line("");
