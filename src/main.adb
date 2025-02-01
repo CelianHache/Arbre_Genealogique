@@ -189,7 +189,15 @@ procedure Main is
          -- R2 - Display each ancestor
          Display (Ancestors(I));
       end loop;
-
+   exception
+      when Arbre_Genealog.Invalid_Tree =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Error when retrieving ancestors, uninitialized tree or specified generation not existing. Please retry.");
+      when others =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Procedure error. Please retry.");
    end Get_All_Ancestors;
 
    procedure Display_Tree(Tree : in T_Arbre_Personnes) is

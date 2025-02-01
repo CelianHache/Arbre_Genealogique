@@ -154,9 +154,11 @@ package Arbre_Genealog is
    -- Type retour :
    --    Ancestor_Array - Tableau des ancêtres appartenant à la génération spécifiée.
    -- Pré-condition :
+   --    - L'arbre est initialisé
    --    - La génération spécifiée doit exister dans l'arbre.
    -- Post-condition :
-   function Get_Ancestors_Generation (Tree : in T_Arbre_Personnes; Generation: Integer) return Ancestor_Array;
+   function Get_Ancestors_Generation (Tree : in T_Arbre_Personnes; Generation: Integer) return Ancestor_Array with
+      Pre => not Is_Null (Tree) or else raise Invalid_Tree;
 
    -- Nom : Get_Sorted_Ancestor_Array
    -- Sémantique : Trie un tableau d'ancêtres par ordre d'apparition.
