@@ -4,7 +4,8 @@ with Ada.Calendar; use Ada.Calendar;
 with Arbre_Genealog; use Arbre_Genealog;
 with Personne; use Personne;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Strings.Unbounded.Text_IO; 
+with Ada.Strings.Unbounded.Text_IO;
+with system.assertions;
 
 procedure Main is
    procedure Show_Menu is
@@ -43,6 +44,7 @@ procedure Main is
       -- R1 - Handle errors
          -- R2 - Display error
          Ada.Text_IO.Put_Line("Incorrect input. Please retry.");
+         Ada.Text_IO.Skip_Line;
          -- R2 - Restart procedure
          return Get_User_Input(Prompt);
    end Get_User_Input;
@@ -132,6 +134,15 @@ procedure Main is
       end if;
       -- R1 - Display family tree
       Display_Family_Tree (Tree);
+   exception
+      when system.assertions.assert_failure =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Error when adding a parent. Uninitialized tree or child node not existing. Please retry.");
+      when others =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Procedure error. Please retry.");
    end Add_Parent;
 
    procedure Get_Number_Ancestors(Tree : in out T_Arbre_Personnes) is

@@ -76,9 +76,11 @@ package Arbre_Genealog is
    --    Value : (in) Personne.T_Personne - La personne représentant le père à ajouter.
    -- Pré-condition :
    --    - Le nœud courant ne doit pas avoir de père déjà ajouté.
+   --    - L'arbre doit être initialisé
    -- Post-condition :
    --    - Le père est ajouté au nœud spécifié.
-   procedure Add_Father (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne);
+   procedure Add_Father (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne) with
+      Pre => not Is_Null (Tree);
 
    -- Nom : Add_Mother
    -- Sémantique : Ajoute une mère à un nœud dans l'arbre généalogique.
@@ -87,9 +89,11 @@ package Arbre_Genealog is
    --    Value : (in) Personne.T_Personne - La personne représentant la mère à ajouter.
    -- Pré-condition :
    --    - Le nœud courant ne doit pas avoir de mère déjà ajoutée.
+   --    - L'arbre doit être initialisé
    -- Post-condition :
    --    - La mère est ajoutée au nœud spécifié.
-   procedure Add_Mother (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne);
+   procedure Add_Mother (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne) with
+      Pre => not Is_Null (Tree);
 
    -- Nom : Add_Father
    -- Sémantique : Ajoute un père à un nœud spécifié par l'identifiant de l'enfant dans l'arbre généalogique.
@@ -99,9 +103,12 @@ package Arbre_Genealog is
    --    Id_Child : (in) String - L'identifiant de l'enfant à qui ajouter le père.
    -- Pré-condition :
    --    - L'enfant identifié par Id_Child existe dans l'arbre.
+   --    - L'arbre doit être initialisé
    -- Post-condition :
    --    - Le père est ajouté à l'enfant spécifié.
-   procedure Add_Father (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne; Id_Child: String);
+   procedure Add_Father (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne; Id_Child: String) with 
+         Pre => not Is_Null (Tree) and 
+             not Is_Null (Get_Node_By_Id(Tree, Id_Child));
 
    -- Nom : Add_Mother
    -- Sémantique : Ajoute une mère à un nœud spécifié par l'identifiant de l'enfant dans l'arbre généalogique.
@@ -110,10 +117,13 @@ package Arbre_Genealog is
    --    Value : (in) Personne.T_Personne - La personne représentant la mère à ajouter.
    --    Id_Child : (in) String - L'identifiant de l'enfant à qui ajouter la mère.
    -- Pré-condition :
+   --    - L'arbre doit être initialisé
    --    - L'enfant identifié par Id_Child existe dans l'arbre.
    -- Post-condition :
    --    - La mère est ajoutée à l'enfant spécifié.
-   procedure Add_Mother (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne; Id_Child: String);
+   procedure Add_Mother (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne; Id_Child: String) with
+      Pre => not Is_Null (Tree) and 
+             not Is_Null (Get_Node_By_Id(Tree, Id_Child));
 
    -- Nom : Get_Node_By_Id
    -- Sémantique : Récupère un nœud dans l'arbre généalogique en utilisant l'identifiant d'un enfant.
