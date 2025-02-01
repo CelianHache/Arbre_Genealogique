@@ -135,7 +135,7 @@ procedure Main is
       -- R1 - Display family tree
       Display_Family_Tree (Tree);
    exception
-      when system.assertions.assert_failure =>
+      when Arbre_Genealog.Invalid_Tree =>
       -- R1 - Handle errors
          -- R2 - Display error
          Ada.Text_IO.Put_Line("Error when adding a parent. Uninitialized tree or child node not existing. Please retry.");
@@ -162,6 +162,20 @@ procedure Main is
       Display_Family_Tree_From_Node (Tree, To_String(Id));
       -- R1 - Display the number of ancestors
       Ada.Text_IO.Put_Line("Number of ancestors : " & Integer'Image(Number_of_ancestors));
+   exception
+      when Arbre_Genealog.Invalid_Tree =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Error when counting ancestors. Uninitialized tree or child node not existing. Please retry.");
+      when Arbre_Genealog.Invalid_Node_Id =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("The node ID is incorrect. Please retry.");
+      when others =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Procedure error. Please retry.");
+   
    end Get_Number_Ancestors;
 
    procedure Get_All_Ancestors(Tree : in out T_Arbre_Personnes; Generation : in Integer) is
