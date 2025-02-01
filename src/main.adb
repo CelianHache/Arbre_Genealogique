@@ -139,6 +139,10 @@ procedure Main is
       -- R1 - Handle errors
          -- R2 - Display error
          Ada.Text_IO.Put_Line("Error when adding a parent. Uninitialized tree or child node not existing. Please retry.");
+      when Arbre_Genealog.Invalid_Node_Id =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("The child node ID is incorrect. Please retry.");
       when others =>
       -- R1 - Handle errors
          -- R2 - Display error

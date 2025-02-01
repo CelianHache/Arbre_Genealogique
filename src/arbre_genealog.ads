@@ -3,6 +3,8 @@ with Personne;
 
 package Arbre_Genealog is
 
+   Invalid_Node_Id : exception;
+
    package Arbre_Personnes is new Arbre_Bin (
       Personne.T_Personne,
       Personne.To_String,
@@ -108,7 +110,7 @@ package Arbre_Genealog is
    --    - Le père est ajouté à l'enfant spécifié.
    procedure Add_Father (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne; Id_Child: String) with 
          Pre => not Is_Null (Tree) and 
-             not Is_Null (Get_Node_By_Id(Tree, Id_Child));
+                not Is_Null (Get_Node_By_Id(Tree, Id_Child));
 
    -- Nom : Add_Mother
    -- Sémantique : Ajoute une mère à un nœud spécifié par l'identifiant de l'enfant dans l'arbre généalogique.
@@ -133,9 +135,11 @@ package Arbre_Genealog is
    -- Type retour :
    --    T_Arbre_Personnes - Le nœud correspondant à l'identifiant de l'enfant.
    -- Pré-condition :
+   --    - L'arbre doit être initialisé
    --    - L'identifiant d'un enfant existe dans l'arbre.
    -- Post-condition :
-   function Get_Node_By_Id (Tree : in T_Arbre_Personnes; Id_Child : String) return T_Arbre_Personnes;
+   function Get_Node_By_Id (Tree : in T_Arbre_Personnes; Id_Child : String) return T_Arbre_Personnes with
+      Pre => not Is_Null (Tree);
 
    -- Nom : Get_Ancestors_Generation
    -- Sémantique : Récupère les ancêtres d'une génération spécifique dans l'arbre généalogique.
