@@ -233,6 +233,19 @@ procedure Main is
       Remove_Family_Member (Tree, To_String(Id));
       -- R1 - Display the updated family tree
       Display_Family_Tree (Tree);
+   exception
+      when Arbre_Genealog.Invalid_Tree =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Error while removing the node, uninitialized tree or node not existing. Please retry.");
+      when Arbre_Genealog.Invalid_Node_Id =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("The node ID is incorrect. Please retry.");
+      when others =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Procedure error. Please retry.");
    end Delete_A_Node;
 
    procedure Get_Single_Parent(Tree: in T_Arbre_Personnes) is

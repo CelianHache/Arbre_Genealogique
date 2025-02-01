@@ -208,10 +208,13 @@ package Arbre_Genealog is
    --    Tree : (in | out) T_Arbre_Personnes - L'arbre généalogique.
    --    Id_Node : (in) String - L'identifiant du membre à supprimer.
    -- Pré-condition :
+   --    - L'arbre est initialisé
    --    - Le membre spécifié par Id_Node doit exister dans l'arbre.
    -- Post-condition :
    --    - Le membre identifié est supprimé de l'arbre.
-   procedure Remove_Family_Member(Tree: in out T_Arbre_Personnes; Id_Node: in String);
+   procedure Remove_Family_Member(Tree: in out T_Arbre_Personnes; Id_Node: in String) with
+      Pre => (not Is_Null (Tree) or else raise Invalid_Tree) and 
+             not Is_Null (Get_Node_By_Id(Tree, Id_Node));
 
    -- Nom : Remove_Father
    -- Sémantique : Supprime le père du nœud spécifié de l'arbre généalogique.
