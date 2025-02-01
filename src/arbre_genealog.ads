@@ -43,10 +43,13 @@ package Arbre_Genealog is
    --    Tree :    (in) T_Arbre_Personnes - L'arbre généalogique.
    --    Id_Node : (in) String - L'identifiant du nœud à partir duquel afficher l'arbre.
    -- Pré-condition :
+   --    - L'arbre est initialisé
    --    - Le nœud spécifié par Id_Node existe dans l'arbre.
    -- Post-condition :
    --    - Les informations des personnes descendant du nœud spécifié sont affichées dans la console.
-   procedure Display_Family_Tree_From_Node(Tree : in T_Arbre_Personnes; Id_Node: String);
+   procedure Display_Family_Tree_From_Node(Tree : in T_Arbre_Personnes; Id_Node: String) with
+      Pre => (not Is_Null (Tree) or else raise Invalid_Tree) and
+             not Is_Null (Get_Node_By_Id(Tree, Id_Node));
 
    -- Nom : Get_Father
    -- Sémantique : Retourne le sous-arbre correspondant au père du nœud courant.

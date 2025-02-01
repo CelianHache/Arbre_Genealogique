@@ -208,6 +208,19 @@ procedure Main is
       Get_String_Input ("Enter the ID of the node : ", Id);
       -- R1 - Display the family tree based on the Id 
       Display_Family_Tree_From_Node (Tree, To_String(Id));
+   exception
+      when Arbre_Genealog.Invalid_Tree =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Error when rendering the tree, uninitialized tree or node not existing. Please retry.");
+      when Arbre_Genealog.Invalid_Node_Id =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("The node ID is incorrect. Please retry.");
+      when others =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Procedure error. Please retry.");
    end Display_Tree;
 
    procedure Delete_A_Node(Tree : in out T_Arbre_Personnes) is 
