@@ -40,7 +40,7 @@ L’application repose sur une architecture modulaire organisée autour du répe
 
 ### Structure et rôle des principaux modules
 
-
+![Diagramme de l'application](assets/rapport/packages.png)
 
 #### 1. **`main.adb`**  
 Le fichier `main.adb` constitue le point d’entrée de l’application. Il intègre un menu interactif qui permet à l’utilisateur d’accéder et d’utiliser les fonctionnalités développées dans les autres modules. Ce menu offre une interface simplifiée pour interagir avec l’arbre généalogique, comme l’ajout ou la suppression d’individus, la modification des relations, et l’affichage de l’arbre, tout en orchestrant l’exécution globale du programme.  
