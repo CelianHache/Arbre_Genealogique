@@ -353,6 +353,8 @@ package body Arbre_Genealog is
          Father_Ancestors : Ancestor_Array(1 .. 2**(Depth-2));  -- Taille initiale
          Father : T_Arbre_Personnes;
          Mother : T_Arbre_Personnes;
+         Count : Integer := 0;
+         Padding : Integer := 0;
       begin 
       -- R0 - Get the nodes with only one parent
          -- R1 - Check for ancestors
@@ -360,6 +362,7 @@ package body Arbre_Genealog is
             -- R2 - Add the ancestor if it has only one parent
             if Has_Only_One_Parent (Tree) then
                Ancestors(1) := Get_Value(Tree);
+               Padding := 1;
             end if;
             -- R2 - Get the ancestors of the mother and the father
             Mother := Get_Mother(Tree);
@@ -368,13 +371,15 @@ package body Arbre_Genealog is
                -- R3 - Get the node with only one parent in the mother tree 
                Mother_Ancestors := Nodes_With_Only_One_Parent_Generation(Mother, Depth-1);
                for i in Mother_Ancestors'Range loop 
-                  Ancestors(i + 1) := Mother_Ancestors(i);
+                  Ancestors(i + Padding) := Mother_Ancestors(i);
+                  Count := Count + 1;
                end loop;
-            else
+            end if;
+            if not Is_Null (Father) then
                -- R3 - Get the node with only one parent in the father tree 
                Father_Ancestors := Nodes_With_Only_One_Parent_Generation(Father, Depth-1);
                for i in Father_Ancestors'Range loop
-                  Ancestors(i + 1) := Father_Ancestors(i);
+                  Ancestors(Count + i) := Father_Ancestors(i);
                end loop;
             end if;
          end if;
