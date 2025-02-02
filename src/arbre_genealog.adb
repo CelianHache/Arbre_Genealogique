@@ -379,7 +379,7 @@ package body Arbre_Genealog is
                -- R3 - Get the node with only one parent in the father tree 
                Father_Ancestors := Nodes_With_Only_One_Parent_Generation(Father, Depth-1);
                for i in Father_Ancestors'Range loop
-                  Ancestors(Count + i) := Father_Ancestors(i);
+                  Ancestors(Padding + Count + i) := Father_Ancestors(i);
                end loop;
             end if;
          end if;
