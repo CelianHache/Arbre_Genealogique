@@ -17,7 +17,7 @@ Ce rapport détaille l’ensemble des aspects techniques et méthodologiques li�
 
 Ce projet ambitionne de fournir une interface intuitive et efficace pour construire, explorer et modifier un arbre généalogique tout en respectant la contrainte d’unicité des enfants, et ce rapport constitue une base solide pour son développement et ses futures évolutions.  
 
-## Introduction  
+## II - Introduction  
 
 La gestion des arbres généalogiques constitue un défi à la fois technique et conceptuel, nécessitant une modélisation rigoureuse des relations familiales. Ce projet s’inscrit dans cette optique et propose le développement d’une application en **Ada** permettant de représenter, manipuler et explorer un arbre généalogique tout en respectant une contrainte particulière : chaque individu est un **enfant unique**, ce qui interdit la présence de fratries dans la structure.  
 
@@ -52,7 +52,7 @@ Le module `personne` se charge de la représentation des individus dans l’arbr
 #### 3. **`arbre_bin`**  
 Ce module implémente les structures de données et les algorithmes fondamentaux pour manipuler des arbres binaires. Il s’agit de la base technique sur laquelle repose l’arbre généalogique, avec des fonctionnalités telles que :  
 - L’ajout et la suppression de nœuds.  
-- Les parcours d’arbre (préfixe, infixe, suffixe).  
+- Les parcours d’arbre.  
 - Les recherches dans l’arbre.  
 
 - **Interface (`arbre_bin.ads`)** : Spécifie les structures et fonctions de base pour les arbres binaires.  
@@ -67,7 +67,6 @@ Construit sur `arbre_bin`, ce module est spécifique à la gestion des relations
 #### 5. **`tests`**  
 Le module `tests` regroupe les tests unitaires et d’intégration conçus pour valider le bon fonctionnement des différentes parties du programme.  
 
-- **Interface (`tests.ads`)** : Spécifie les cas de tests disponibles.  
 - **Implémentation (`tests.adb`)** : Contient les scénarios de test et leurs résultats attendus.  
 
 ### Synthèse de l'architecture  
@@ -86,6 +85,18 @@ Notre modèle d’arbre généalogique repose sur une **chaîne de nœuds** où 
 
 Ce modèle facilite également les opérations de modification, telles que l’ajout ou la suppression d’individus, en mettant à jour les références parentales sans nécessiter de réorganisation complexe de l’ensemble de l’arbre.
 
+### 3. Génération des IDs
+Afin de faciliter le parcours de l'arbre, les IDs sont générés automatiquement de la façon suivante : 
+- 0 pour la racine
+- ID de l'enfant suivi de 1 pour un parent gauche (père)
+- ID de l'enfant suivi de 2 pour un parent droit (mère)
+
+### 4. Nom et prénom pouvant être vides
+Afin de permettre d'entrer des personnes partiellement connues dans l'arbre, le nom et le prénom peuvent être laissés vides (chaîne vide).
+
+### 5. Simplification de la saisie
+Dans le main, les dates de naissance et de décès ainsi que les ville de naissance sont saisies automatiquement afin de faciliter la création de nouvelles personnes.
+
 ## V - Algorithmes et types de données  
 
 ### 1. **Types de données utilisés**  
@@ -98,45 +109,51 @@ L'architecture de l'application repose sur des **enregistrements (`record`)**, d
 ### 2. **Principaux algorithmes implémentés**  
 
 #### a) **Création de l’arbre généalogique**  
-- `Initialiser_Arbre(Racine, Valeur_Racine)`:  
+- `Create_Family_Tree(Root : in out T_Arbre_Personnes; Root_Value : Personne.T_Personne)`:  
   Initialise un arbre avec un individu racine et construit progressivement les relations parentales.  
 
 #### b) **Affichage de l’arbre**  
-- `Afficher_Arbre_Genealogique(Arbre)`:  
+- `Display_Family_Tree(Tree : in T_Arbre_Personnes)`:  
   Affiche l’arbre généalogique en parcourant récursivement les nœuds.  
-- `Afficher_Arbre_Depuis_Noed(Arbre, ID_Noed)`:  
+- `Display_Family_Tree_From_Node(Tree : in T_Arbre_Personnes; Id_Node: String)`:  
   Affiche l’arbre en partant d’un individu donné.  
 
 #### c) **Ajout d’un parent**  
-- `Ajouter_Pere(Arbre, Valeur)`, `Ajouter_Mere(Arbre, Valeur)`:  
-  Ajoute un père ou une mère à la racine de l’arbre.  
-- `Ajouter_Pere(Arbre, Valeur, ID_Enfant)`, `Ajouter_Mere(Arbre, Valeur, ID_Enfant)`:  
-  Permet d’ajouter un parent à un individu spécifique identifié par `ID_Enfant`.  
+- `Add_Father (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne)`:  
+  Ajoute un père à la racine de l’arbre.  
+- `Add_Mother (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne)`:  
+  Ajoute une mère à la racine de l’arbre.  
+- `Add_Father (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne; Id_Child: String)`:  
+  Permet d’ajouter un père à un individu spécifique identifié par `ID_Enfant`.  
+- `Add_Mother (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne; Id_Child: String)`:  
+  Permet d’ajouter une mère à un individu spécifique identifié par `ID_Enfant`. 
 
 #### d) **Accès aux parents et enfants**  
-- `Obtenir_Pere(Arbre)`, `Obtenir_Mere(Arbre)`:  
-  Retourne respectivement le père et la mère d’un individu.  
-- `Obtenir_Enfants(Arbre, ID_Noed)`:  
+- `Get_Father (Tree : in T_Arbre_Personnes) return T_Arbre_Personnes;`:  
+  Retourne le père d’un individu.  
+- `Get_Mother (Tree : in T_Arbre_Personnes) return T_Arbre_Personnes;`:  
+  Retourne  la mère d’un individu.  
+- `Get_Child(Tree: in T_Arbre_Personnes; Id_Node : in String)`:  
   Permet d’obtenir les enfants d’un individu donné, sous réserve d’un `ID_Noed` valide.  
 
 #### e) **Suppression d’un membre de la famille**  
-- `Supprimer_Membre_Famille(Arbre, ID_Noed)`:  
+- `Remove_Family_Member(Tree: in out T_Arbre_Personnes; Id_Node: in String)`:  
   Supprime un individu et réorganise l’arbre pour maintenir la structure.  
-- `Supprimer_Pere(Enfant)`, `Supprimer_Mere(Enfant)`:  
+- `Remove_Father(Child: in out T_Arbre_Personnes)`:  
   Supprime respectivement le père ou la mère d’un individu donné.  
 
 #### f) **Analyse de l’arbre généalogique**  
-- `Compter_Ancetres(Arbre, ID_Noed)`:  
+- `Count_Ancestors(Tree: in T_Arbre_Personnes; Id_Node : in String)`:  
   Calcule le nombre total d’ancêtres d’un individu.  
-- `Obtenir_Ancetres_Par_Generation(Arbre, Generation)`:  
+- `Get_Ancestors_Generation (Tree : in T_Arbre_Personnes; Generation: Integer)`:  
   Retourne tous les ancêtres d’une génération spécifique.  
-- `Noeuds_Avec_Deux_Parents(Arbre)`, `Noeuds_Avec_Un_Seul_Parent(Arbre)`, `Noeuds_Sans_Parent(Arbre)`:  
+- `Nodes_With_Two_Parents(Tree : in T_Arbre_Personnes)`, `Nodes_With_Only_One_Parent(Tree : in T_Arbre_Personnes)`, `Nodes_Without_Parent(Tree : in T_Arbre_Personnes)`:  
   Renvoie respectivement les individus ayant deux parents, un seul parent ou aucun parent.  
-- `A_Deux_Parents(Arbre)`, `A_Un_Seul_Parent(Arbre)`, `Est_Orphelin(Arbre)`:  
+- `Has_Two_Parents(Tree : in T_Arbre_Personnes)`, `Has_Only_One_Parent(Tree : in T_Arbre_Personnes)`, `Is_Orphan(Tree : in T_Arbre_Personnes)`:  
   Vérifie le statut parental d’un individu.  
 
 #### g) **Profondeur et structure de l’arbre**  
-- `Calculer_Profondeur_Arbre(Arbre)`:  
+- `Get_Tree_Depth(Tree: in T_Arbre_Personnes)`:  
   Calcule la profondeur de l’arbre, utile pour évaluer le nombre de générations présentes.  
 
 Ces algorithmes assurent une manipulation efficace des données généalogiques, garantissant cohérence et intégrité des relations parentales dans l’arbre.
@@ -178,8 +195,6 @@ Les tests ont été exécutés sur plusieurs jeux de données et ont permis de v
 ### Solutions
 
 - Pour surmonter ces défis, des stratégies ont été mises en place pour utiliser de manière optimale les structures de données d'Ada, en tirant parti de sa gestion mémoire stricte tout en conservant la flexibilité nécessaire pour manipuler un arbre généalogique complexe. Des fonctions spécifiques ont également été développées pour gérer les types de données de manière sûre et efficace, assurant ainsi une gestion sans erreur de l’arbre.
-
-Merci pour ces précisions. Je vais maintenant reformuler le texte en utilisant le pronom du pluriel et en intégrant les points supplémentaires que tu as mentionnés, notamment la difficulté d'évaluer le temps passé sur les tâches, la répartition des tâches par fonctionnalité, la rédaction des rapports par chaque membre et la mention du temps total de travail. Voici la version révisée :
 
 ### 1. **Bilan technique :**
 
