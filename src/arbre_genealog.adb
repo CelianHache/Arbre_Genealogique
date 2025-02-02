@@ -1,5 +1,6 @@
 with Ada.Text_IO; use Ada.Text_IO;
 with Arbre_Genealog;
+with GNAT.Sockets;
 with Personne; use Personne;
 with Ada.Calendar; use Ada.Calendar;
 
@@ -85,6 +86,9 @@ package body Arbre_Genealog is
          elsif Path(i) = '2' then
             -- R3 - Replace current tree by the mother's tree
             Temp_Tree := Get_Mother(Temp_Tree);
+         else 
+            -- R3 - Filled in id contains characters impossible in our use case
+            raise Invalid_Node_Id;
          end if;
       end loop;
       -- R1 - Return the tree

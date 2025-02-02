@@ -25,8 +25,10 @@ package Arbre_Bin is
    --    Id   :   (in) String - L'id du successeur qui va être ajouté
    --    Value :  (in) Element_Type - La valeur du successeur
    -- Pré-condition:
+   --    L'arbre doit être initialisé
    -- Post-Condition:
-   procedure Add_Right(Tree : in out T_Arbre; Id :  in String; Value : in Element_Type);
+   procedure Add_Right(Tree : in out T_Arbre; Id :  in String; Value : in Element_Type) with
+      Pre => not Is_Null(Tree);
 
    -- Nom: Add_Left
    -- Sémantique: Ajouter un successeur à gauche
@@ -35,8 +37,10 @@ package Arbre_Bin is
    --    Id   :   (in) String - L'id du successeur qui va être ajouté
    --    Value :  (in) Element_Type - La valeur du successeur
    -- Pré-condition:
+   --    L'arbre doit être initialisé
    -- Post-Condition:
-   procedure Add_Left(Tree : in out T_Arbre; Id :  in String; Value : in Element_Type);
+   procedure Add_Left(Tree : in out T_Arbre; Id :  in String; Value : in Element_Type) with
+      Pre => not Is_Null(Tree);
 
    -- Nom: Remove_Right
    -- Sémantique: Supprimer le successeur à droite

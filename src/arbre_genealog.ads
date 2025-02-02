@@ -3,6 +3,9 @@ with Personne;
 
 package Arbre_Genealog is
 
+   Invalid_Node_Id : exception;
+   Invalid_Tree : exception;
+
    package Arbre_Personnes is new Arbre_Bin (
       Personne.T_Personne,
       Personne.To_String,
@@ -40,10 +43,13 @@ package Arbre_Genealog is
    --    Tree :    (in) T_Arbre_Personnes - L'arbre généalogique.
    --    Id_Node : (in) String - L'identifiant du nœud à partir duquel afficher l'arbre.
    -- Pré-condition :
+   --    - L'arbre est initialisé
    --    - Le nœud spécifié par Id_Node existe dans l'arbre.
    -- Post-condition :
    --    - Les informations des personnes descendant du nœud spécifié sont affichées dans la console.
-   procedure Display_Family_Tree_From_Node(Tree : in T_Arbre_Personnes; Id_Node: String);
+   procedure Display_Family_Tree_From_Node(Tree : in T_Arbre_Personnes; Id_Node: String) with
+      Pre => (not Is_Null (Tree) or else raise Invalid_Tree) and
+             not Is_Null (Get_Node_By_Id(Tree, Id_Node));
 
    -- Nom : Get_Father
    -- Sémantique : Retourne le sous-arbre correspondant au père du nœud courant.
@@ -52,10 +58,12 @@ package Arbre_Genealog is
    -- Type retour :
    --    T_Arbre_Personnes - Le sous-arbre représentant le père.
    -- Pré-condition :
+   --    - L'arbre est initialisé
    --    - Le nœud courant a un père dans l'arbre.
    -- Post-condition :
    --    - Le sous-arbre retourné correspond au père du nœud courant.
-   function Get_Father (Tree : in T_Arbre_Personnes) return T_Arbre_Personnes;
+   function Get_Father (Tree : in T_Arbre_Personnes) return T_Arbre_Personnes with
+      Pre => not Is_Null (Tree) or else raise Invalid_Tree;
 
    -- Nom : Get_Mother
    -- Sémantique : Retourne le sous-arbre correspondant à la mère du nœud courant.
@@ -64,10 +72,12 @@ package Arbre_Genealog is
    -- Type retour :
    --    T_Arbre_Personnes - Le sous-arbre représentant la mère.
    -- Pré-condition :
+   --    - L'arbre est initialisé
    --    - Le nœud courant a une mère dans l'arbre.
    -- Post-condition :
    --    - Le sous-arbre retourné correspond à la mère du nœud courant.
-   function Get_Mother (Tree : in T_Arbre_Personnes) return T_Arbre_Personnes;
+   function Get_Mother (Tree : in T_Arbre_Personnes) return T_Arbre_Personnes with
+      Pre => not Is_Null (Tree) or else raise Invalid_Tree;
 
    -- Nom : Add_Father
    -- Sémantique : Ajoute un père à un nœud dans l'arbre généalogique.
@@ -76,9 +86,11 @@ package Arbre_Genealog is
    --    Value : (in) Personne.T_Personne - La personne représentant le père à ajouter.
    -- Pré-condition :
    --    - Le nœud courant ne doit pas avoir de père déjà ajouté.
+   --    - L'arbre doit être initialisé
    -- Post-condition :
    --    - Le père est ajouté au nœud spécifié.
-   procedure Add_Father (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne);
+   procedure Add_Father (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne) with
+      Pre => not Is_Null (Tree) or else raise Invalid_Tree;
 
    -- Nom : Add_Mother
    -- Sémantique : Ajoute une mère à un nœud dans l'arbre généalogique.
@@ -87,9 +99,11 @@ package Arbre_Genealog is
    --    Value : (in) Personne.T_Personne - La personne représentant la mère à ajouter.
    -- Pré-condition :
    --    - Le nœud courant ne doit pas avoir de mère déjà ajoutée.
+   --    - L'arbre doit être initialisé
    -- Post-condition :
    --    - La mère est ajoutée au nœud spécifié.
-   procedure Add_Mother (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne);
+   procedure Add_Mother (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne) with
+      Pre => not Is_Null (Tree) or else raise Invalid_Tree;
 
    -- Nom : Add_Father
    -- Sémantique : Ajoute un père à un nœud spécifié par l'identifiant de l'enfant dans l'arbre généalogique.
@@ -99,9 +113,12 @@ package Arbre_Genealog is
    --    Id_Child : (in) String - L'identifiant de l'enfant à qui ajouter le père.
    -- Pré-condition :
    --    - L'enfant identifié par Id_Child existe dans l'arbre.
+   --    - L'arbre doit être initialisé
    -- Post-condition :
    --    - Le père est ajouté à l'enfant spécifié.
-   procedure Add_Father (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne; Id_Child: String);
+   procedure Add_Father (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne; Id_Child: String) with 
+      Pre => (not Is_Null (Tree) or else raise Invalid_Tree ) and 
+             not Is_Null (Get_Node_By_Id(Tree, Id_Child));
 
    -- Nom : Add_Mother
    -- Sémantique : Ajoute une mère à un nœud spécifié par l'identifiant de l'enfant dans l'arbre généalogique.
@@ -110,10 +127,13 @@ package Arbre_Genealog is
    --    Value : (in) Personne.T_Personne - La personne représentant la mère à ajouter.
    --    Id_Child : (in) String - L'identifiant de l'enfant à qui ajouter la mère.
    -- Pré-condition :
+   --    - L'arbre doit être initialisé
    --    - L'enfant identifié par Id_Child existe dans l'arbre.
    -- Post-condition :
    --    - La mère est ajoutée à l'enfant spécifié.
-   procedure Add_Mother (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne; Id_Child: String);
+   procedure Add_Mother (Tree : in out T_Arbre_Personnes; Value: Personne.T_Personne; Id_Child: String) with
+      Pre => (not Is_Null (Tree) or else raise Invalid_Tree) and 
+             not Is_Null (Get_Node_By_Id(Tree, Id_Child));
 
    -- Nom : Get_Node_By_Id
    -- Sémantique : Récupère un nœud dans l'arbre généalogique en utilisant l'identifiant d'un enfant.
@@ -123,9 +143,11 @@ package Arbre_Genealog is
    -- Type retour :
    --    T_Arbre_Personnes - Le nœud correspondant à l'identifiant de l'enfant.
    -- Pré-condition :
+   --    - L'arbre doit être initialisé
    --    - L'identifiant d'un enfant existe dans l'arbre.
    -- Post-condition :
-   function Get_Node_By_Id (Tree : in T_Arbre_Personnes; Id_Child : String) return T_Arbre_Personnes;
+   function Get_Node_By_Id (Tree : in T_Arbre_Personnes; Id_Child : String) return T_Arbre_Personnes with
+      Pre => not Is_Null (Tree) or else raise Invalid_Tree;
 
    -- Nom : Get_Ancestors_Generation
    -- Sémantique : Récupère les ancêtres d'une génération spécifique dans l'arbre généalogique.
@@ -135,9 +157,11 @@ package Arbre_Genealog is
    -- Type retour :
    --    Ancestor_Array - Tableau des ancêtres appartenant à la génération spécifiée.
    -- Pré-condition :
+   --    - L'arbre est initialisé
    --    - La génération spécifiée doit exister dans l'arbre.
    -- Post-condition :
-   function Get_Ancestors_Generation (Tree : in T_Arbre_Personnes; Generation: Integer) return Ancestor_Array;
+   function Get_Ancestors_Generation (Tree : in T_Arbre_Personnes; Generation: Integer) return Ancestor_Array with
+      Pre => not Is_Null (Tree) or else raise Invalid_Tree;
 
    -- Nom : Get_Sorted_Ancestor_Array
    -- Sémantique : Trie un tableau d'ancêtres par ordre d'apparition.
@@ -171,9 +195,12 @@ package Arbre_Genealog is
    -- Type retour :
    --    Integer - Le nombre d'ancêtres du nœud spécifié.
    -- Pré-condition :
+   --    - L'arbre est initialisé
    --    - Le nœud identifié par Id_Node doit exister dans l'arbre.
    -- Post-condition :
-   function Count_Ancestors(Tree: in T_Arbre_Personnes; Id_Node : in String) return Integer;
+   function Count_Ancestors(Tree: in T_Arbre_Personnes; Id_Node : in String) return Integer with
+      Pre => (not Is_Null (Tree) or else raise Invalid_Tree) and 
+             not Is_Null (Get_Node_By_Id(Tree, Id_Node));
 
    -- Nom : Remove_Family_Member
    -- Sémantique : Supprime un membre de la famille spécifié par son identifiant de l'arbre généalogique.
@@ -181,10 +208,13 @@ package Arbre_Genealog is
    --    Tree : (in | out) T_Arbre_Personnes - L'arbre généalogique.
    --    Id_Node : (in) String - L'identifiant du membre à supprimer.
    -- Pré-condition :
+   --    - L'arbre est initialisé
    --    - Le membre spécifié par Id_Node doit exister dans l'arbre.
    -- Post-condition :
    --    - Le membre identifié est supprimé de l'arbre.
-   procedure Remove_Family_Member(Tree: in out T_Arbre_Personnes; Id_Node: in String);
+   procedure Remove_Family_Member(Tree: in out T_Arbre_Personnes; Id_Node: in String) with
+      Pre => (not Is_Null (Tree) or else raise Invalid_Tree) and 
+             not Is_Null (Get_Node_By_Id(Tree, Id_Node));
 
    -- Nom : Remove_Father
    -- Sémantique : Supprime le père du nœud spécifié de l'arbre généalogique.

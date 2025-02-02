@@ -4,7 +4,8 @@ with Ada.Calendar; use Ada.Calendar;
 with Arbre_Genealog; use Arbre_Genealog;
 with Personne; use Personne;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-with Ada.Strings.Unbounded.Text_IO; 
+with Ada.Strings.Unbounded.Text_IO;
+with system.assertions;
 
 procedure Main is
    procedure Show_Menu is
@@ -43,6 +44,7 @@ procedure Main is
       -- R1 - Handle errors
          -- R2 - Display error
          Ada.Text_IO.Put_Line("Incorrect input. Please retry.");
+         Ada.Text_IO.Skip_Line;
          -- R2 - Restart procedure
          return Get_User_Input(Prompt);
    end Get_User_Input;
@@ -132,6 +134,19 @@ procedure Main is
       end if;
       -- R1 - Display family tree
       Display_Family_Tree (Tree);
+   exception
+      when Arbre_Genealog.Invalid_Tree =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Error when adding a parent. Uninitialized tree or child node not existing. Please retry.");
+      when Arbre_Genealog.Invalid_Node_Id =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("The child node ID is incorrect. Please retry.");
+      when others =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Procedure error. Please retry.");
    end Add_Parent;
 
    procedure Get_Number_Ancestors(Tree : in out T_Arbre_Personnes) is
@@ -147,6 +162,20 @@ procedure Main is
       Display_Family_Tree_From_Node (Tree, To_String(Id));
       -- R1 - Display the number of ancestors
       Ada.Text_IO.Put_Line("Number of ancestors : " & Integer'Image(Number_of_ancestors));
+   exception
+      when Arbre_Genealog.Invalid_Tree =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Error when counting ancestors. Uninitialized tree or child node not existing. Please retry.");
+      when Arbre_Genealog.Invalid_Node_Id =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("The node ID is incorrect. Please retry.");
+      when others =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Procedure error. Please retry.");
+   
    end Get_Number_Ancestors;
 
    procedure Get_All_Ancestors(Tree : in out T_Arbre_Personnes; Generation : in Integer) is
@@ -160,7 +189,15 @@ procedure Main is
          -- R2 - Display each ancestor
          Display (Ancestors(I));
       end loop;
-
+   exception
+      when Arbre_Genealog.Invalid_Tree =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Error when retrieving ancestors, uninitialized tree or specified generation not existing. Please retry.");
+      when others =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Procedure error. Please retry.");
    end Get_All_Ancestors;
 
    procedure Display_Tree(Tree : in T_Arbre_Personnes) is
@@ -171,6 +208,19 @@ procedure Main is
       Get_String_Input ("Enter the ID of the node : ", Id);
       -- R1 - Display the family tree based on the Id 
       Display_Family_Tree_From_Node (Tree, To_String(Id));
+   exception
+      when Arbre_Genealog.Invalid_Tree =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Error when rendering the tree, uninitialized tree or node not existing. Please retry.");
+      when Arbre_Genealog.Invalid_Node_Id =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("The node ID is incorrect. Please retry.");
+      when others =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Procedure error. Please retry.");
    end Display_Tree;
 
    procedure Delete_A_Node(Tree : in out T_Arbre_Personnes) is 
@@ -183,6 +233,19 @@ procedure Main is
       Remove_Family_Member (Tree, To_String(Id));
       -- R1 - Display the updated family tree
       Display_Family_Tree (Tree);
+   exception
+      when Arbre_Genealog.Invalid_Tree =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Error while removing the node, uninitialized tree or node not existing. Please retry.");
+      when Arbre_Genealog.Invalid_Node_Id =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("The node ID is incorrect. Please retry.");
+      when others =>
+      -- R1 - Handle errors
+         -- R2 - Display error
+         Ada.Text_IO.Put_Line("Procedure error. Please retry.");
    end Delete_A_Node;
 
    procedure Get_Single_Parent(Tree: in T_Arbre_Personnes) is
