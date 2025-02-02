@@ -146,8 +146,7 @@ package Arbre_Genealog is
    --    - L'arbre doit être initialisé
    --    - L'identifiant d'un enfant existe dans l'arbre.
    -- Post-condition :
-   function Get_Node_By_Id (Tree : in T_Arbre_Personnes; Id_Child : String) return T_Arbre_Personnes with
-      Pre => not Is_Null (Tree) or else raise Invalid_Tree;
+   function Get_Node_By_Id (Tree : in T_Arbre_Personnes; Id_Child : String) return T_Arbre_Personnes;
 
    -- Nom : Get_Ancestors_Generation
    -- Sémantique : Récupère les ancêtres d'une génération spécifique dans l'arbre généalogique.
@@ -157,11 +156,9 @@ package Arbre_Genealog is
    -- Type retour :
    --    Ancestor_Array - Tableau des ancêtres appartenant à la génération spécifiée.
    -- Pré-condition :
-   --    - L'arbre est initialisé
-   --    - La génération spécifiée doit exister dans l'arbre.
    -- Post-condition :
-   function Get_Ancestors_Generation (Tree : in T_Arbre_Personnes; Generation: Integer) return Ancestor_Array with
-      Pre => not Is_Null (Tree) or else raise Invalid_Tree;
+   --    Renvoie la liste des ancètres d'une génération spécifique ou une liste vide si la génération n'existe pas
+   function Get_Ancestors_Generation (Tree : in T_Arbre_Personnes; Generation: Integer) return Ancestor_Array;
 
    -- Nom : Get_Sorted_Ancestor_Array
    -- Sémantique : Trie un tableau d'ancêtres par ordre d'apparition.
@@ -195,12 +192,9 @@ package Arbre_Genealog is
    -- Type retour :
    --    Integer - Le nombre d'ancêtres du nœud spécifié.
    -- Pré-condition :
-   --    - L'arbre est initialisé
-   --    - Le nœud identifié par Id_Node doit exister dans l'arbre.
    -- Post-condition :
-   function Count_Ancestors(Tree: in T_Arbre_Personnes; Id_Node : in String) return Integer with
-      Pre => (not Is_Null (Tree) or else raise Invalid_Tree) and 
-             not Is_Null (Get_Node_By_Id(Tree, Id_Node));
+   --    Renvoie le nombre d'ancètres ou 0 si l'arbre n'existe pas 
+   function Count_Ancestors(Tree: in T_Arbre_Personnes; Id_Node : in String) return Integer;
 
    -- Nom : Remove_Family_Member
    -- Sémantique : Supprime un membre de la famille spécifié par son identifiant de l'arbre généalogique.

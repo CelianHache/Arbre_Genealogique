@@ -77,6 +77,9 @@ package body Arbre_Genealog is
    begin
    -- R0 - Get a node based on its ID
       -- R1 - Retrieve the direct ancestor
+      if Id_Child(Id_Child'First) /= '0' then
+         raise Invalid_Node_Id;
+      end if;
       Temp_Tree := Tree;
       for i in Path'Range loop
          -- R2 -Check the digits of the searched id
